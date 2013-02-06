@@ -82,9 +82,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Source1.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="Database.h" />
     <ClInclude Include="Record.h" />
     <ClInclude Include="Table.h" />

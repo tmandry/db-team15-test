@@ -1,0 +1,9 @@
+**/Debug/
+**/Release/
+Debug/
+Release/
+*.user
+*.suo
+*.sublime-project
+*.sublime-workspace
+*.opensdf

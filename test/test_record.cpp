@@ -1,10 +1,25 @@
-#include "../gmock-1.6.0/gmock.h"
+#include "../gmock-1.6.0/include/gmock/gmock.h"
 #include "../Record.h"
+
+#include <string>
+#include <vector>
+using namespace std;
+
+vector<string> get_attributes() {
+  vector<string> attr;
+  attr.push_back("Ol' Rock");
+  attr.push_back("56");
+  attr.push_back("Super Senior");
+  attr.push_back("4.0");
+  attr.push_back("01/01/2013");
+
+  return attr;
+}
 
 // This is a where a factory or fixture would be helpful?
 Record shared_record;
 void setup_shared_record() {
-  shared_record = Record(vector<string>(["Ol' Rock", "56", "Super Senior", "4.0", "01/01/2013"]));
+  shared_record = Record(get_attributes());
 }
 
 /* Test Construction of Records */
@@ -13,7 +28,7 @@ TEST(RecordConstructionTest, CreatesEmptyRecord) {
 }
 
 TEST(RecordConstructionTest, CreatesPredefinedRecord) {
-  vector<string> attributes(["Ol' Rock", "56", "Super Senior"]);
+  vector<string> attributes = get_attributes();
   EXPECT_NO_THROW(Record(attributes));
 }
 

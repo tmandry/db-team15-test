@@ -5,6 +5,8 @@
 #include <vector>
 using namespace std;
 
+//14 test cases
+
 vector<string> get_attributes() {
   string attr_array[] = { "Ol' Rock", "56", "Super Senior", "4.0", "01/01/2013" };
   vector<string> attr(attr_array, attr_array + 5);
@@ -50,7 +52,18 @@ TEST(RecordRetrievalTest, RetrievesFloatingAttribute) {
   EXPECT_EQ("4.0", shared_record.retreiveRecord(3));
 }
 
-// TODO: test for Date retrieval and Time retrieval
+TEST(RecordRetrievalTest, RetrievesDateAttribute) {
+  setup_shared_record();
+
+  EXPECT_EQ("01/01/2013", shared_record.retreiveRecord(4));
+}
+
+TEST(RecordRetrievalTest, RetrievesTimeAtrribute) {
+  setup_shared_record();
+
+  EXPECT_EQ("13:55:23", shared_record.retreiveRecord(7));
+}
+
 
 /* Test Modifying of Attributes */
 TEST(RecordModifyTest, ModifiesStringAttribute) {
@@ -78,4 +91,36 @@ TEST(RecordModifyTest, ModifiesFloatingAttribute) {
   shared_record.modifyRecord(3, "4.5");
 
   EXPECT_EQ("4.5", shared_record.retreiveRecord(3));
+}
+
+TEST(RecordModifyTest, ModifiesNegativeIntegerAttribute) {
+  setup_shared_record();
+
+  shared_record.modifyRecord(5, "-8");
+
+  EXPECT_EQ("-8", shared_record.retreiveRecord(5));
+}
+
+TEST(RecordModifyTest, ModifiesNegativeFloatingPointAttribute) {
+  setup_shared_record();
+
+  shared_record.modifyRecord(6, "-6.9");
+
+  EXPECT_EQ("-6.9", shared_record.retreiveRecord(6));
+}
+
+TEST(RecordModifyTest, ModifiesDateAttribute) {
+  setup_shared_record();
+
+  shared_record.modifyRecord(4, "02/09/2013");
+
+  EXPECT_EQ("02/09/2013", shared_record.retreiveRecord(4));
+}
+
+TEST(RecordModifyTest, ModifiesTimeAttribute) {
+  setup_shared_record();
+
+  shared_record.modifyRecord(7, "15:25:23");
+
+  EXPECT_EQ("15:25:23", shared_record.retreiveRecord(7));
 }

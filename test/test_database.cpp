@@ -7,53 +7,36 @@
 using namespace std;
 
 vector<string> get_attributes() {
-  vector<string> attr;
-  attr.push_back("Name");
-  attr.push_back("Age");
-  attr.push_back("Grade");
-  attr.push_back("GPA");
-  attr.push_back("GraduationDate");
+  // NOTE: If we can use C++11, we can use vector literals instead
+  string attr_array[] = { "Name", "Age", "Grade", "GPA", "GraduationDate" };
+  vector<string> attr(attr_array, attr_array + 5);
 
   return attr;
 }
 
-// I don't know what these types are supposed to be, this is my best guess
+// Don't know what these types are supposed to be, this is my best guess
 vector<string> get_attribute_types() {
-  vector<string> types;
-  types.push_back("string");
-  types.push_back("int");
-  types.push_back("string");
-  types.push_back("float");
-  types.push_back("date");
+  string type_array[] = { "string", "int", "string", "float", "date" };
+  vector<string> types(type_array, type_array + 5);
 
   return types;
 }
 
 void get_basic_database() {
   Table students(get_attributes(), get_attribute_types());
-  vector<string> jane;
-  jane.push_back("Jane Smith");
-  jane.push_back("19");
-  jane.push_back("Sophomore");
-  jane.push_back("2.8");
-  jane.push_back("05/06/2015");
 
-  vector<string> jack;
-  jack.push_back("Jack Smith");
-  jack.push_back("21");
-  jack.push_back("Senior");
-  jack.push_back("3.2");
-  jack.push_back("05/06/2013");
+  string jane_array[] = { "Jane Smith", "19", "Sophomore", "2.8", "05/06/2015" };
+  vector<string> jane(jane_array, jane_array + 5);
 
-  vector<string> jim;
-  jack.push_back("Jim Smith");
-  jack.push_back("21");
-  jack.push_back("Senior");
-  jack.push_back("3.1");
-  jack.push_back("05/06/2013");
+  string jack_array[] = { "Jack Smith", "21", "Senior",    "3.2", "05/06/2013" };
+  vector<string> jack(jack_array, jack_array + 5);
+
+  string jim_array[] =  { "Jim Smith",  "21", "Senior",    "3.1", "05/06/2013" };
+  vector<string> jim(jim_array, jim_array + 5);
 
   students.insert(jane);
   students.insert(jack);
+  students.insert(jim);
 
   Database database;
   database.addTable(students, "students");
@@ -85,12 +68,22 @@ TEST(DatabaseTableTest, DropsTables) {
   EXPECT_EQ(0, database.getTableNames.size());
 }
 
+TEST(DatabaseTableTest, GetsEmptyTableNames) {
+  Database database;
+  EXPECT_EQ(database.getTableNames().size(), 0);
+}
+
 TEST(DatabaseTableTest, GetsTableNames) {
   Table students(get_attributes(), get_attribute_types());
   Database database;
   database.addTable(students, "students");
 
   EXPECT_EQ(database.getTableNames()[0], "students")
+}
+
+TEST(DatabaseTableTest, GetsEmptyTables) {
+  Database database;
+  EXPECT_EQ(database.getTables().size(), 0);
 }
 
 TEST(DatabaseTableTest, GetsTables) {
@@ -120,9 +113,8 @@ TEST(DatabaseQueryTest, HandlesSelectQuery) {
   Database database = get_basic_database();
   Table query;
 
-  vector<string> attr;
-  attr.push_back("Name");
-  attr.push_back("Age");
+  string attr_array[] = { "Name", "Age" };
+  vector<string> attr(attr_array, attr_array + 2);
 
   EXPECT_NO_THROW(query = database.query("Name, Age", "students", ""));
   EXPECT_TRUE( equal( query.attributes().begin(),
@@ -320,9 +312,8 @@ TEST(DatabaseQueryTest, HandlesSelectWhereEqQuery) {
   Database database = get_basic_database();
   Table query;
 
-  vector<string> attr;
-  attr.push_back("Name");
-  attr.push_back("Age");
+  string attr_array[] = { "Name", "Age" };
+  vector<string> attr(attr_array, attr_array + 2);
 
   EXPECT_NO_THROW(query = database.query("Name, Age", "students", "Age = 19"));
   EXPECT_TRUE( equal( query.attributes().begin(),

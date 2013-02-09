@@ -145,7 +145,7 @@ TEST(DatabaseQueryTest, HandlesSelectNoneQuery) {
 }
 
 // SELECT *, WHERE =
-TEST(DatabaseQueryTest, HandlesWhereEQuery) {
+TEST(DatabaseQueryTest, HandlesWhereEqQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -159,7 +159,7 @@ TEST(DatabaseQueryTest, HandlesWhereEQuery) {
 }
 
 // SELECT *, WHERE !=
-TEST(DatabaseQueryTest, HandlesWhereNEQuery) {
+TEST(DatabaseQueryTest, HandlesWhereNEqQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -173,7 +173,7 @@ TEST(DatabaseQueryTest, HandlesWhereNEQuery) {
 }
 
 // SELECT *, WHERE >
-TEST(DatabaseQueryTest, HandlesWhereGTQuery) {
+TEST(DatabaseQueryTest, HandlesWhereGtQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -187,7 +187,7 @@ TEST(DatabaseQueryTest, HandlesWhereGTQuery) {
 }
 
 // SELECT *, WHERE <
-TEST(DatabaseQueryTest, HandlesWhereLTQuery) {
+TEST(DatabaseQueryTest, HandlesWhereLtQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -201,7 +201,7 @@ TEST(DatabaseQueryTest, HandlesWhereLTQuery) {
 }
 
 // SELECT *, WHERE >=
-TEST(DatabaseQueryTest, HandlesWhereGTEQuery) {
+TEST(DatabaseQueryTest, HandlesWhereGteQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -215,7 +215,7 @@ TEST(DatabaseQueryTest, HandlesWhereGTEQuery) {
 }
 
 // SELECT *, WHERE <=
-TEST(DatabaseQueryTest, HandlesWhereLTEQuery) {
+TEST(DatabaseQueryTest, HandlesWhereLteQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -231,7 +231,7 @@ TEST(DatabaseQueryTest, HandlesWhereLTEQuery) {
 /* Multiple conditions on queries, there could be so many combinations here to test */
 
 // SELECT *, WHERE = AND =
-TEST(DatabaseQueryTest, HandlesWhereEAndEQuery) {
+TEST(DatabaseQueryTest, HandlesWhereEqAndEqQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -245,7 +245,7 @@ TEST(DatabaseQueryTest, HandlesWhereEAndEQuery) {
 }
 
 // SELECT *, WHERE > OR =
-TEST(DatabaseQueryTest, HandlesWhereEOrEQuery) {
+TEST(DatabaseQueryTest, HandlesWhereEqOrEqQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -259,7 +259,7 @@ TEST(DatabaseQueryTest, HandlesWhereEOrEQuery) {
 }
 
 // SELECT *, WHERE > NOT >=
-TEST(DatabaseQueryTest, HandlesWhereGTNotGTEQuery) {
+TEST(DatabaseQueryTest, HandlesWhereGteNotGteQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -299,7 +299,6 @@ TEST(DatabaseQueryTest, HandlesTwoNestedWhereQuery) {
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
-
 // SELECT *, WHERE - 3 levels of parenthesis
 TEST(DatabaseQueryTest, HandlesThreeNestedWhereQuery) {
   Database database = get_basic_database();
@@ -317,7 +316,7 @@ TEST(DatabaseQueryTest, HandlesThreeNestedWhereQuery) {
 /* Select some attributes, with conditions */
 
 // SELECT 2, WHERE =
-TEST(DatabaseQueryTest, HandlesSelectWhereEQuery) {
+TEST(DatabaseQueryTest, HandlesSelectWhereEqQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -332,4 +331,96 @@ TEST(DatabaseQueryTest, HandlesSelectWhereEQuery) {
   EXPECT_EQ(query.size(), 1);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
+}
+
+/* Deleting of Data */
+
+// SELECT *
+TEST(DatabaseDeleteQueryTest, HandlesBasicQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", ""));
+  EXPECT_EQ(database.getTables()[0].size(), 0);
+}
+
+// SELECT *, WHERE =
+TEST(DatabaseDeleteQueryTest, HandlesWhereEqQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age = 19"));
+  EXPECT_EQ(database.getTables()[0].size(), 2);
+}
+
+// SELECT *, WHERE !=
+TEST(DatabaseDeleteQueryTest, HandlesWhereNEqQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age != 19"));
+  EXPECT_EQ(database.getTables()[0].size(), 1);
+}
+
+// SELECT *, WHERE <
+TEST(DatabaseDeleteQueryTest, HandlesWhereLtQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age < 19"));
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+}
+
+// SELECT *, WHERE >
+TEST(DatabaseDeleteQueryTest, HandlesWhereGtQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age > 19"));
+  EXPECT_EQ(database.getTables()[0].size(), 1);
+}
+
+// SELECT *, WHERE <=
+TEST(DatabaseDeleteQueryTest, HandlesWhereLteQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age <= 19"));
+  EXPECT_EQ(database.getTables()[0].size(), 2);
+}
+
+// SELECT *, WHERE >=
+TEST(DatabaseDeleteQueryTest, HandlesWhereGteQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age >= 19"));
+  EXPECT_EQ(database.getTables()[0].size(), 0);
+}
+
+// SELECT *, WHERE - 1 level of parenthesis
+TEST(DatabaseDeleteQueryTest, HandlesOneNestedWhereQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age = 19 OR ( Age >= 21 AND GPA = 3.2 )"));
+  EXPECT_EQ(database.getTables()[0].size(), 1);
+}
+
+// SELECT *, WHERE =
+TEST(DatabaseDeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age = 19 AND ( Name = 'Jack Smith' OR ( GPA > 3.0 AND Grade = 'Senior' ) )"));
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+}
+
+// SELECT *, WHERE =
+TEST(DatabaseDeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
+  Database database = get_basic_database();
+
+  EXPECT_EQ(database.getTables()[0].size(), 3);
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '05/06/2013') )"));
+  EXPECT_EQ(database.getTables()[0].size(), 1);
 }

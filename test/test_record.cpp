@@ -6,12 +6,8 @@
 using namespace std;
 
 vector<string> get_attributes() {
-  vector<string> attr;
-  attr.push_back("Ol' Rock");
-  attr.push_back("56");
-  attr.push_back("Super Senior");
-  attr.push_back("4.0");
-  attr.push_back("01/01/2013");
+  string attr_array[] = { "Ol' Rock", "56", "Super Senior", "4.0", "01/01/2013" };
+  vector<string> attr(attr_array, attr_array + 5);
 
   return attr;
 }
@@ -42,8 +38,6 @@ TEST(RecordRetrievalTest, RetrievesStringAttribute) {
 
 // QUESTION: Not sure about int and float, they expect a string to be given to
 //           the function, though ideally, the record should convert it for you.
-//           Same with retrieval, otherwise, what is the point of the DB having
-//           types if you have to convert them? Same problem with modifying.
 TEST(RecordRetrievalTest, RetrievesIntegerAttribute) {
   setup_shared_record();
 

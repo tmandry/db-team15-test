@@ -159,7 +159,34 @@ TEST(RenamingAttribute, FailsForNonexistentAttribute) {
 // possibly make another "known" version of the final cross joined table
 
 /* Summation of attirbutes */
+TEST(SumAttribute, Success) {
+	setup_shared_table_with_data();
+	EXPECT_EQ(61, shared_table.sum("Age"));
+}
+
+TEST(SumAttribute, FailsForNonexistentAttribute) {
+	setup_shared_table_with_data();
+	EXPECT_THROW(shared_table.sum("Woo"));
+}
 
 /* Finding minimum attribute entry */
+TEST(MinAttribute, Success) {
+	setup_shared_table_with_data();
+	EXPECT_EQ(19, shared_table.min("Age"));
+}
+
+TEST(MinAttribute, FailsForNonexistentAttribute) {
+	setup_shared_table_with_data();
+	EXPECT_THROW(shared_table.min("Woo"));
+}
 
 /* Finding maximum attribute entry */
+TEST(MaxAttribute, Success) {
+	setup_shared_table_with_data();
+	EXPECT_EQ(21, shared_table.max("Age"));
+}
+
+TEST(MaxAttribute, FailsForNonexistentAttribute) {
+	setup_shared_table_with_data();
+	EXPECT_THROW(shared_table.max("Woo"));
+}

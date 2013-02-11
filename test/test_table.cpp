@@ -11,7 +11,7 @@ vector<string> get_attribute_names() {
 	names.push_back("56");
 	names.push_back("Super Senior");
 	names.push_back("4.0");
-	names.push_back("01/01/2013");
+	names.push_back("2013/01/01");
 	names.push_back("-2");
 	names.push_back("-5.2");
 	names.push_back("13:55:23")
@@ -116,7 +116,7 @@ TEST(RenamingAttribute, RenamingFailure) {
 // not sure how to test this yet
 // possibly make another "known" version of the final cross joined table
 
-/* Summation of attirbutes */ 
+/* Summation of attirbutes */
 
 /* Finding minimum attribute entry */
 

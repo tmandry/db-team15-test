@@ -25,13 +25,13 @@ vector<string> get_attribute_types() {
 void get_basic_database() {
   Table students(get_attributes(), get_attribute_types());
 
-  string jane_array[] = { "Jane Smith", "19", "Sophomore", "2.8", "05/06/2015" };
+  string jane_array[] = { "Jane Smith", "19", "Sophomore", "2.8", "2015/05/06" };
   vector<string> jane(jane_array, jane_array + 5);
 
-  string jack_array[] = { "Jack Smith", "21", "Senior",    "3.2", "05/06/2013" };
+  string jack_array[] = { "Jack Smith", "21", "Senior",    "3.2", "2013/05/06" };
   vector<string> jack(jack_array, jack_array + 5);
 
-  string jim_array[] =  { "Jim Smith",  "21", "Senior",    "3.1", "05/06/2013" };
+  string jim_array[] =  { "Jim Smith",  "21", "Senior",    "3.1", "2013/05/06" };
   vector<string> jim(jim_array, jim_array + 5);
 
   students.insert(jane);
@@ -296,7 +296,7 @@ TEST(DatabaseQueryTest, HandlesThreeNestedWhereQuery) {
   Database database = get_basic_database();
   Table query;
 
-  EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '05/06/2013') )"));
+  EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '2013/05/06') )"));
   EXPECT_TRUE( equal( query.attributes().begin(),
                       query.attributes().end(),
                       get_attributes.begin() ));
@@ -412,6 +412,6 @@ TEST(DatabaseDeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
-  EXPECT_TRUE(database.deleteQuery("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '05/06/2013') )"));
+  EXPECT_TRUE(database.deleteQuery("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '2013/05/06') )"));
   EXPECT_EQ(database.getTables()[0].size(), 1);
 }

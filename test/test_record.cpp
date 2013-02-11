@@ -8,7 +8,7 @@ using namespace std;
 //14 test cases
 
 vector<string> get_attributes() {
-  string attr_array[] = { "Ol' Rock", "56", "Super Senior", "4.0", "01/01/2013" };
+  string attr_array[] = { "Ol' Rock", "56", "Super Senior", "4.0", "2013/01/01" };
   vector<string> attr(attr_array, attr_array + 5);
 
   return attr;
@@ -112,9 +112,9 @@ TEST(RecordModifyTest, ModifiesNegativeFloatingPointAttribute) {
 TEST(RecordModifyTest, ModifiesDateAttribute) {
   setup_shared_record();
 
-  shared_record.modifyRecord(4, "02/09/2013");
+  shared_record.modifyRecord(4, "2013/02/09");
 
-  EXPECT_EQ("02/09/2013", shared_record.retreiveRecord(4));
+  EXPECT_EQ("2013/02/09", shared_record.retreiveRecord(4));
 }
 
 TEST(RecordModifyTest, ModifiesTimeAttribute) {

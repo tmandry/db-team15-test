@@ -97,19 +97,17 @@ TEST(DatabaseTableTest, GetsTables) {
 /* Query Database */
 
 // SELECT *
-TEST(DatabaseQueryTest, HandlesBasicQuery) {
+TEST(QueryTest, HandlesBasicQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", ""));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 3);
 }
 
 // SELECT 2
-TEST(DatabaseQueryTest, HandlesSelectQuery) {
+TEST(QueryTest, HandlesSelectQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -117,104 +115,88 @@ TEST(DatabaseQueryTest, HandlesSelectQuery) {
   vector<string> attr(attr_array, attr_array + 2);
 
   EXPECT_NO_THROW(query = database.query("Name, Age", "students", ""));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      attr.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 3);
 }
 
 // SELECT 0
-TEST(DatabaseQueryTest, HandlesSelectNoneQuery) {
+TEST(QueryTest, HandlesSelectNoneQuery) {
   Database database = get_basic_database();
   Table query;
   vector<string> attr;
 
   EXPECT_NO_THROW(query = database.query("", "students", ""));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      attr.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 3);
 }
 
 // SELECT *, WHERE =
-TEST(DatabaseQueryTest, HandlesWhereEqQuery) {
+TEST(QueryTest, HandlesWhereEqQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 1);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table
 }
 
 // SELECT *, WHERE !=
-TEST(DatabaseQueryTest, HandlesWhereNEqQuery) {
+TEST(QueryTest, HandlesWhereNEqQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age != 19"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 2);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE >
-TEST(DatabaseQueryTest, HandlesWhereGtQuery) {
+TEST(QueryTest, HandlesWhereGtQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > 19"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 2);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE <
-TEST(DatabaseQueryTest, HandlesWhereLtQuery) {
+TEST(QueryTest, HandlesWhereLtQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age < 21"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 1);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE >=
-TEST(DatabaseQueryTest, HandlesWhereGteQuery) {
+TEST(QueryTest, HandlesWhereGteQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age >= 19"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 3);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE <=
-TEST(DatabaseQueryTest, HandlesWhereLteQuery) {
+TEST(QueryTest, HandlesWhereLteQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age <= 19"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 1);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
@@ -223,83 +205,71 @@ TEST(DatabaseQueryTest, HandlesWhereLteQuery) {
 /* Multiple conditions on queries, there could be so many combinations here to test */
 
 // SELECT *, WHERE = AND =
-TEST(DatabaseQueryTest, HandlesWhereEqAndEqQuery) {
+TEST(QueryTest, HandlesWhereEqAndEqQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 AND Name = 'Jane Smith'"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 1);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE > OR =
-TEST(DatabaseQueryTest, HandlesWhereEqOrEqQuery) {
+TEST(QueryTest, HandlesWhereEqOrEqQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > 19 OR Name = 'Jane Smith'"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 3);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE > NOT >=
-TEST(DatabaseQueryTest, HandlesWhereGteNotGteQuery) {
+TEST(QueryTest, HandlesWhereGteNotGteQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > 19 NOT GPA >= 4.0"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 2);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE - 1 level of parenthesis
-TEST(DatabaseQueryTest, HandlesOneNestedWhereQuery) {
+TEST(QueryTest, HandlesOneNestedWhereQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 OR ( Age >= 21 AND GPA = 3.2 )"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 2);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 
 // SELECT *, WHERE - 3 levels of parenthesis
-TEST(DatabaseQueryTest, HandlesTwoNestedWhereQuery) {
+TEST(QueryTest, HandlesTwoNestedWhereQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 AND ( Name = 'Jack Smith' OR ( GPA > 3.0 AND Grade = 'Senior' ) )"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 0);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
 }
 // SELECT *, WHERE - 3 levels of parenthesis
-TEST(DatabaseQueryTest, HandlesThreeNestedWhereQuery) {
+TEST(QueryTest, HandlesThreeNestedWhereQuery) {
   Database database = get_basic_database();
   Table query;
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '2013/05/06') )"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      get_attributes.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 1);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
@@ -308,7 +278,7 @@ TEST(DatabaseQueryTest, HandlesThreeNestedWhereQuery) {
 /* Select some attributes, with conditions */
 
 // SELECT 2, WHERE =
-TEST(DatabaseQueryTest, HandlesSelectWhereEqQuery) {
+TEST(QueryTest, HandlesSelectWhereEqQuery) {
   Database database = get_basic_database();
   Table query;
 
@@ -316,9 +286,7 @@ TEST(DatabaseQueryTest, HandlesSelectWhereEqQuery) {
   vector<string> attr(attr_array, attr_array + 2);
 
   EXPECT_NO_THROW(query = database.query("Name, Age", "students", "Age = 19"));
-  EXPECT_TRUE( equal( query.attributes().begin(),
-                      query.attributes().end(),
-                      attr.begin() ));
+  EXPECT_THAT(query, Each(get_attributes() ));
   EXPECT_EQ(query.size(), 1);
   // Need a way to test that the correct record was returned, but there is no
   // way to get individual records from a table. Iterator is currently private.
@@ -327,7 +295,7 @@ TEST(DatabaseQueryTest, HandlesSelectWhereEqQuery) {
 /* Deleting of Data */
 
 // SELECT *
-TEST(DatabaseDeleteQueryTest, HandlesBasicQuery) {
+TEST(DeleteQueryTest, HandlesBasicQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -336,7 +304,7 @@ TEST(DatabaseDeleteQueryTest, HandlesBasicQuery) {
 }
 
 // SELECT *, WHERE =
-TEST(DatabaseDeleteQueryTest, HandlesWhereEqQuery) {
+TEST(DeleteQueryTest, HandlesWhereEqQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -345,7 +313,7 @@ TEST(DatabaseDeleteQueryTest, HandlesWhereEqQuery) {
 }
 
 // SELECT *, WHERE !=
-TEST(DatabaseDeleteQueryTest, HandlesWhereNEqQuery) {
+TEST(DeleteQueryTest, HandlesWhereNEqQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -354,7 +322,7 @@ TEST(DatabaseDeleteQueryTest, HandlesWhereNEqQuery) {
 }
 
 // SELECT *, WHERE <
-TEST(DatabaseDeleteQueryTest, HandlesWhereLtQuery) {
+TEST(DeleteQueryTest, HandlesWhereLtQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -363,7 +331,7 @@ TEST(DatabaseDeleteQueryTest, HandlesWhereLtQuery) {
 }
 
 // SELECT *, WHERE >
-TEST(DatabaseDeleteQueryTest, HandlesWhereGtQuery) {
+TEST(DeleteQueryTest, HandlesWhereGtQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -372,7 +340,7 @@ TEST(DatabaseDeleteQueryTest, HandlesWhereGtQuery) {
 }
 
 // SELECT *, WHERE <=
-TEST(DatabaseDeleteQueryTest, HandlesWhereLteQuery) {
+TEST(DeleteQueryTest, HandlesWhereLteQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -381,7 +349,7 @@ TEST(DatabaseDeleteQueryTest, HandlesWhereLteQuery) {
 }
 
 // SELECT *, WHERE >=
-TEST(DatabaseDeleteQueryTest, HandlesWhereGteQuery) {
+TEST(DeleteQueryTest, HandlesWhereGteQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -390,7 +358,7 @@ TEST(DatabaseDeleteQueryTest, HandlesWhereGteQuery) {
 }
 
 // SELECT *, WHERE - 1 level of parenthesis
-TEST(DatabaseDeleteQueryTest, HandlesOneNestedWhereQuery) {
+TEST(DeleteQueryTest, HandlesOneNestedWhereQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -399,7 +367,7 @@ TEST(DatabaseDeleteQueryTest, HandlesOneNestedWhereQuery) {
 }
 
 // SELECT *, WHERE =
-TEST(DatabaseDeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
+TEST(DeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);
@@ -408,7 +376,7 @@ TEST(DatabaseDeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
 }
 
 // SELECT *, WHERE =
-TEST(DatabaseDeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
+TEST(DeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
   Database database = get_basic_database();
 
   EXPECT_EQ(database.getTables()[0].size(), 3);

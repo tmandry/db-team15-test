@@ -157,6 +157,23 @@ TEST(RenamingAttribute, FailsForNonexistentAttribute) {
 /* Test the joining of two tables */
 // not sure how to test this yet
 // possibly make another "known" version of the final cross joined table
+Test(CrossJoin, HasAllAttributes) {
+	setup_shared_table();
+
+	vector<string> names, types;
+	names.push_back("abc"); types.push_back("Date");
+	names.push_back("def"); types.push_back("Integer");
+	names.push_back("ghi"); types.push_back("String");
+	Table other_table(names, types);
+
+	Table joined = shared_table.cross_join(other_table);
+	vector<string> attributes = joined.attributes();
+	vector<string> join_names(names);
+	vector<string> names2(get_attribute_names());
+	join_names.insert(join_names.end(), names2.begin(), names2.end());
+	sort(join_names.begin(), join_names.end());
+	EXPECT_THAT(attributes, WhenSorted(ContainerEq(join_names)));
+}
 
 /* Counting of attributes */
 TEST(CountAttribute, Success) {

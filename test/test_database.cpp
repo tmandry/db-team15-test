@@ -383,3 +383,299 @@ TEST(DeleteQueryTest, HandlesThreeNestedWhereEqQuery) {
   EXPECT_TRUE(database.deleteQuery("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '2013/05/06') )"));
   EXPECT_EQ(database.getTables()[0].size(), 1);
 }
+
+/******** Integer comparison tests ********/
+
+// SELECT *, WHERE =
+TEST(IntegerComparisonTest, HandlesWhereEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Age = 21"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE !=
+TEST(IntegerComparisonTest, HandlesWhereNEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Age != 21"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >
+TEST(IntegerComparisonTest, HandlesWhereGtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Age > 21"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 0);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <
+TEST(IntegerComparisonTest, HandlesWhereLtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Age < 21"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >=
+TEST(IntegerComparisonTest, HandlesWhereGteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Age >= 21"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <=
+TEST(IntegerComparisonTest, HandlesWhereLteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Age <= 21"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 3);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+/******** Float comparison tests ********/
+
+// SELECT *, WHERE =
+TEST(FloatComparisonTest, HandlesWhereEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GPA = 3.1"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE !=
+TEST(FloatComparisonTest, HandlesWhereNEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GPA != 3.1"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >
+TEST(FloatComparisonTest, HandlesWhereGtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GPA > 3.1"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <
+TEST(FloatComparisonTest, HandlesWhereLtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GPA < 3.1"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >=
+TEST(FloatComparisonTest, HandlesWhereGteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GPA >= 3.1"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <=
+TEST(FloatComparisonTest, HandlesWhereLteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GPA <= 3.1"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+/******** Date comparison tests ********/
+
+// SELECT *, WHERE =
+TEST(DateComparisonTest, HandlesWhereEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate = 2015/05/06"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE !=
+TEST(DateComparisonTest, HandlesWhereNEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate != 2015/05/06"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >
+TEST(DateComparisonTest, HandlesWhereGtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate > 2015/05/06"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 0);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <
+TEST(DateComparisonTest, HandlesWhereLtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate < 2015/05/06"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >=
+TEST(DateComparisonTest, HandlesWhereGteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate >= 2015/05/06"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <=
+TEST(DateComparisonTest, HandlesWhereLteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate <= 3.0"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 3);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+/******** String comparison tests ********/
+
+// SELECT *, WHERE =
+TEST(StringComparisonTest, HandlesWhereEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Name = 'Jane Smith'"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE !=
+TEST(StringComparisonTest, HandlesWhereNEqQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Name != 'Jane Smith'"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >
+TEST(StringComparisonTest, HandlesWhereGtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Name > 'Jane Smith'"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <
+TEST(StringComparisonTest, HandlesWhereLtQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Name < 'Jane Smith'"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 1);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE >=
+TEST(StringComparisonTest, HandlesWhereGteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Name >= 'Jane Smith'"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}
+
+// SELECT *, WHERE <=
+TEST(StringComparisonTest, HandlesWhereLteQuery) {
+  Database database = get_basic_database();
+  Table query;
+
+  EXPECT_NO_THROW(query = database.query("*", "students", "Name <= 'Jane Smith'"));
+  EXPECT_THAT(query, Each(get_attributes() ));
+  EXPECT_EQ(query.size(), 2);
+  // Need a way to test that the correct record was returned, but there is no
+  // way to get individual records from a table
+}

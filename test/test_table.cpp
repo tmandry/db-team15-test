@@ -4,6 +4,7 @@
 #include <vector>
 
 using namespace std;
+using namspace ::testing;
 
 vector<string> get_attribute_names() {
 	vector<string> names;
@@ -31,57 +32,79 @@ vector<string> get_attribute_types() {
 	return types;
 }
 
-Table shared_table
+Table shared_table;
 void setup_shared_table() {
 	shared_table = Table(get_attribute_names(), get_attribute_types());
 }
 
 /* Test Construction of Tables */
-TEST(TableConstructionTest, CreatesEmptyTable) {
-	EXPECT_NO_THROW(Table());
+TEST(TableConstructionTest, CreatesEmptyTableWithNoRows) {
+	Table* table;
+	EXPECT_NO_THROW(table = new Table());
+	EXPECT_EQ(table->size(), 0);
+	delete table;
 }
 
-TEST(TableConstructionTest, CreatesPredefinedTable) {
-	vector<string> names = get_attribute_names();
-	vector<string> types = get_attribute_types();
-	EXPECT_NO_THROW(Table(names, types));
+TEST(TableConstructionTest, CreatesPredefinedTableWithNoRows) {
+	EXPECT_NO_THROW(setup_shared_table());
+	EXPECT_EQ(shared_table.size(), 0);
 }
 
 /* Test Adding attributes to Table */
-TEST(AddAttributeTest, AddsAttributeSuccess) {
+TEST(AddAttributeTest, Success) {
 	setup_shared_table();
 	EXPECT_EQ(TRUE, shared_table.add("72", "Integer"));
 }
 
-TEST(AddAttributeTest, AddsAttributeFailure) {
+TEST(AddAttributeTest, FailsOnNonIntegerString) {
 	setup_shared_table();
-	EXPECT_EQ(FALSE, shared_table.add(72, "Integer"));
+	EXPECT_EQ(FALSE, shared_table.add("lala", "Integer"));
 }
 
 /* Test Deleting attributes from Table */
-TEST(DeleteAttributeTest, DeleteAttributeSuccess) {
+TEST(DeleteAttributeTest, Success) {
 	setup_shared_table();
 	EXPECT_EQ(TRUE, shared_table.deleteAttribute("Date"));
 }
 
-TEST(DeleteAttributeTest, DelteAttributeFailure) {
+TEST(DeleteAttributeTest, FailsForNonexistentAttribute) {
 	setup_shared_table();
 	EXPECT_EQ(FALSE, shared_table.deleteAttribute("int"));
 }
 
+TEST(DeleteAttributeTest, DeletesAttribute) {
+	setup_shared_table();
+	EXPECT_THAT(shared_table.attributes(), Contains("Date"));
+	shared_table.deleteAttribute("Date");
+	EXPECT_THAT(shared_table.attributes(), Not(Contains("Date")));
+}
+
 /* Inserting Record to Table */
-TEST(InsertNewRecord, InsertRecordSuccessful) {
+TEST(InsertNewRecord, Success) {
 	setup_shared_table();
 	vector<string> new_record = get_attribute_names();
 	EXPECT_EQ(TRUE, shared_table.insert(new_record));
 }
 
-TEST(InsertNewRecord, InsertRecordFailed) {
+TEST(InsertNewRecord, FailsForWrongVectorSize) {
 	setup_shared_table();
 	vector<int> new_record;
 	new_record.push_back(4);
 	new_record.push_back(3);
 	EXPECT_EQ(FALSE, shared_table.insert(new_record));
+}
+
+TEST(InsertNewRecord, IncrementsSize) {
+	setup_shared_table();
+	vector<string> new_record = get_attribute_names();
+	int size = shared_table.size();
+	shared_table.insert(new_record);
+	EXPECT_EQ(shared_table.size(), size+1);
+}
+
+TEST(Attributes, ReturnsAttributesList) {
+	setup_shared_table();
+	EXPECT_EQ(shared_table.attributes(), get_attribute_names());
 }
 
 /* Test retrieving attributes */
@@ -102,14 +125,14 @@ TEST(TableSize, ReturnsNumberTableEntries) {
 }
 
 /* Test renaming attributes */
-TEST(RenamingAttribute, RenamingSuccess) {
+TEST(RenamingAttribute, Success) {
 	setup_shared_table();
 	EXPECT_EQ(TRUE, shared_table.rename("Super Senior", "Red Shirt Freshman"));
 }
 
-TEST(RenamingAttribute, RenamingFailure) {
+TEST(RenamingAttribute, FailsForNonexistentAttribute) {
 	setup_shared_table();
-	EXPECT_EQ(FALSE, shared_table.rename("Super Senior", 22))
+	EXPECT_EQ(FALSE, shared_table.rename("anothercolumn", "somethingelse"));
 }
 
 /* Test the joining of two tables */

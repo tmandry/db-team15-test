@@ -158,6 +158,17 @@ TEST(RenamingAttribute, FailsForNonexistentAttribute) {
 // not sure how to test this yet
 // possibly make another "known" version of the final cross joined table
 
+/* Counting of attributes */
+TEST(CountAttribute, Success) {
+	setup_shared_table_with_data();
+	EXPECT_EQ(3, shared_table.sum("Age"));
+}
+
+TEST(CountAttribute, FailsForNonexistentAttribute) {
+	setup_shared_table_with_data();
+	EXPECT_THROW(shared_table.sum("Woo"));
+}
+
 /* Summation of attirbutes */
 TEST(SumAttribute, Success) {
 	setup_shared_table_with_data();

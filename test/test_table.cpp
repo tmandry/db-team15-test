@@ -41,11 +41,12 @@ protected:
 	  vector<string> jim(jim_array, jim_array + 5);
 
 	  string bill_array[] = { "Bill Smith", "NULL","Junior",   "3.1", "2013/05/06", "-5", "20.19", "21:00:00" };
-	  vector<string> jim(jim_array, jim_array + 5);
+	  vector<string> bill(bill_array, bill_array + 5);
 
 	  shared_table.insert(jane);
 	  shared_table.insert(jack);
 	  shared_table.insert(jim);
+	  shared_table.insert(bill);
 	  return 3;
 	}
 

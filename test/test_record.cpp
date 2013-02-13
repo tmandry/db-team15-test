@@ -8,7 +8,7 @@ using namespace std;
 //14 test cases
 
 vector<string> get_attributes() {
-  string attr_array[] = { "Ol' Rock", "56", "Super Senior", "4.0", "2013/01/01" };
+  string attr_array[] = { "Ol' Rock", "56", "Super Senior", "4.0", "2013/01/01", "-9", "-3.5" };
   vector<string> attr(attr_array, attr_array + 5);
 
   return attr;
@@ -57,13 +57,6 @@ TEST(RecordRetrievalTest, RetrievesDateAttribute) {
 
   EXPECT_EQ("01/01/2013", shared_record.retreiveRecord(4));
 }
-
-TEST(RecordRetrievalTest, RetrievesTimeAtrribute) {
-  setup_shared_record();
-
-  EXPECT_EQ("13:55:23", shared_record.retreiveRecord(7));
-}
-
 
 /* Test Modifying of Attributes */
 TEST(RecordModifyTest, ModifiesStringAttribute) {
@@ -115,12 +108,4 @@ TEST(RecordModifyTest, ModifiesDateAttribute) {
   shared_record.modifyRecord(4, "2013/02/09");
 
   EXPECT_EQ("2013/02/09", shared_record.retreiveRecord(4));
-}
-
-TEST(RecordModifyTest, ModifiesTimeAttribute) {
-  setup_shared_record();
-
-  shared_record.modifyRecord(7, "15:25:23");
-
-  EXPECT_EQ("15:25:23", shared_record.retreiveRecord(7));
 }

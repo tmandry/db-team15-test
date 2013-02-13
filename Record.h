@@ -28,7 +28,7 @@ public:
 	* @return Nothing is returned
 	*/
 	void modifyRecord(int index, string newAttr);
-	
+
 
 private:
 	vector<string> entries;

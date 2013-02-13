@@ -1,7 +1,7 @@
 #ifdef DBDLL_EXPORTS
-#define DBDLL_API __declspec(dllexport) 
+#define DBDLL_API __declspec(dllexport)
 #else
-#define DBDLL_API __declspec(dllimport) 
+#define DBDLL_API __declspec(dllimport)
 #endif
 
 #ifndef __DATABASE__TEAM15_
@@ -13,16 +13,16 @@
 
 using namespace std;
 
-class DBDLL_API Database 
+class DBDLL_API Database
 {
 public:
-	
+
 	/**
 	* Default Constructor to create a Database.
 	*/
 	Database() {};
 
-	
+
 	/**
 	 * Add a Table to the Database.
 	 * @param table The Table to be added to the Database

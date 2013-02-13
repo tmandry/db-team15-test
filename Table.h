@@ -6,11 +6,21 @@
 #include <vector>
 #include <map>
 
-using namespace std;  
+using namespace std;
 
 class Table
 {
 public:
+
+	/**
+	 * Enum containing all the valid input types for the Table.
+	 */
+	enum TYPE {
+		INT,
+		FLOAT,
+		STRING,
+		DATE
+	};
 
 	/**
 	 * Default constructor to create a Table
@@ -22,7 +32,7 @@ public:
 	 * @param attrNames A list of strings containing attribute names
 	 * @param attrTypes A list of strings containing attribute types
 	 */
-	Table(vector<string> attrNames, vector<string> attrTypes) {}
+	Table(vector<string> attrNames, vector<TYPE> attrTypes) {}
 
 	/**
 	 * Add an attribute to the table
@@ -30,7 +40,7 @@ public:
 	 * @param attrType The type of the new attribute
 	 * @return Returns true on success, false on failure
 	 */
-	bool add(string attrName, string attrType);
+	bool add(string attrName, TYPE attrType);
 
 	/**
 	 * Removes an attribute from a table
@@ -48,9 +58,9 @@ public:
 
 	/**
 	 * Get the attributes of a table
-	 * @return Returns vector<string> of the table attributes
+	 * @return Returns vector<TYPE> of the table attributes
 	 */
-	vector<string> attributes();
+	vector<TYPE> attributes();
 
 	/**
 	 * Get the size of the table
@@ -104,7 +114,30 @@ public:
 
 private:
 	vector<Record> records; /**< A vector containing all the records of the table */
-	vector<Record>::iterator iter; /**< An iterator to traverse the records */
 };
+
+class TableIterator
+{
+public:
+	/**
+	 * Creates a table iterator with the given Table
+	 * @param table The table you want to iterate through\
+	 */
+	TableIterator(Table table);
+
+	void first();	/**< Move to the first entry in the table */
+
+	/**
+	 * Move to the next entry in the table
+	 * @return Returns true on success, false if there are no more records left in the table
+	 */
+	bool next();
+
+	/**
+	 * Get the record at the current position of the iterator
+	 * @return The record at the current position of the iterator
+	 */
+	Record getRecord();
+}
 
 #endif	// __TABLE__TEAM15_

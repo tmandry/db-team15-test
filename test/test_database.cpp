@@ -15,9 +15,9 @@ vector<string> get_attributes() {
 }
 
 // Don't know what these types are supposed to be, this is my best guess
-vector<string> get_attribute_types() {
-  string type_array[] = { "string", "int", "string", "float", "date" };
-  vector<string> types(type_array, type_array + 5);
+vector<TYPE> get_attribute_types() {
+  TYPE type_array[] = { STRING, INT, STRING, FLOAT, DATE };
+  vector<TYPE> types(type_array, type_array + 5);
 
   return types;
 }

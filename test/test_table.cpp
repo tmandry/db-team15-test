@@ -12,8 +12,8 @@ protected:
 	virtual void SetUp() {
 		string attr_array[] = { "Name", "Age", "Grade", "GPA", "GraduationDate", "BooksOwed", "DiningDollars", "LastLoginTime" };
 	  attribute_names = vector<string>(attr_array, attr_array+8);
-		string type_array[] = { "string", "integer", "string", "float", "date", "integer", "float", "time" };
-		attribute_types = vector<string>(type_array, type_array + 8);
+		TYPE type_array[] = { STRING, INT, STRING, FLOAT, DATE, INT, FLOAT, TIME };
+		attribute_types = vector<TYPE>(type_array, type_array + 8);
 
 	  string jane_array[] = { "Jane Smith", "19", "Sophomore", "2.8", "2015/05/06", "-2", "-1.28", "01:44:12" };
 	  single_record = vector<string>(jane_array, jane_array + 5);
@@ -52,7 +52,7 @@ protected:
 
 	Table shared_table;
 	vector<string> attribute_names;
-	vector<string> attribute_types;
+	vector<TYPE> attribute_types;
 	vector<string> single_record;
 };
 

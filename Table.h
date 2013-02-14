@@ -137,6 +137,6 @@ public:
 	 * @return The record at the current position of the iterator
 	 */
 	Record getRecord();
-}
+};
 
 #endif	// __TABLE__TEAM15_

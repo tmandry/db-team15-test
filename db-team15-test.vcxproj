@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Database.h" />
+    <ClInclude Include="Error.h" />
     <ClInclude Include="Record.h" />
     <ClInclude Include="Table.h" />
   </ItemGroup>

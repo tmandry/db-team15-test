@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 
-using namespace std;
+using namespace std;  
 
 class Table
 {
@@ -58,9 +58,9 @@ public:
 
 	/**
 	 * Get the attributes of a table
-	 * @return Returns vector<TYPE> of the table attributes
+	 * @return Returns map<string, TYPE> of the table attribute names and types
 	 */
-	vector<TYPE> attributes();
+	map<string, TYPE> attributes();
 
 	/**
 	 * Get the size of the table
@@ -78,11 +78,10 @@ public:
 
 	/**
 	 * Cross join two tables
-	 * @param t1 The first table to cross
-	 * @param t2 The second table to cross
-	 * @return Returns the cross of the two input tables
+	 * @param table The table to cross with
+	 * @return Returns the cross of the two tables
 	 */
-	Table crossJoin(Table t1, Table t2);
+	Table crossJoin(Table table);
 
 	/**
 	 * Sum an attribute

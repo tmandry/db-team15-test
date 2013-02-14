@@ -57,8 +57,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>gmock-1.6.0\msvc\2010\Release;gmock-1.6.0\gtest\msvc\gtest\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gtest.lib;gtest_main.lib;gmock.lib;gmock_main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>gmock-1.6.0\gtest\msvc\db-team15-test\Debug;gmock-1.6.0\msvc\2010\Release;gmock-1.6.0\gtest\msvc\gtest\Release;Z:\Google Drive\School\CSCE315\db-team15-test\gmock-1.6.0\gtest\msvc\gtest\Debug;gmock-1.6.0\msvc\2010\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>gtestd.lib;gmock.lib;gmock_main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

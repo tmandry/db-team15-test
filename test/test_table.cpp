@@ -9,6 +9,24 @@
 using namespace std;
 using namespace ::testing;
 
+/* custom matchers */
+MATCHER_P2(RecordEq, record, num_fields, "") {
+  for (int i = 0; i < num_fields; ++i) {
+    if (const_cast<Record&>(arg).retrieve(i) != record.retrieve(i))
+      return false;
+  }
+  return true;
+}
+
+// Does not detect if record has MORE fields than specified
+MATCHER_P(RecordElementsAre, container, "") {
+  for (unsigned i = 0; i < container.size(); ++i) {
+    if (const_cast<Record&>(arg).retrieve(i) != container[i])
+      return false;
+  }
+  return true;
+}
+
 class TableTest : public Test
 {
 protected:
@@ -42,10 +60,10 @@ protected:
     RowArray jane_array = { "Jane Smith", "19", "Sophomore", "2.8", "2015/05/06", "-2", "-1.28", "01:44:12" };
     vector<string> jane(jane_array.begin(), jane_array.end());
 
-    RowArray jack_array = { "Jack Smith", "21", "Senior",    "3.2", "2013/05/06", "4",  "67.45", "14:56:34" };
+    RowArray jack_array = { "Jack Smith", "21", "NULL",    "3.2", "2013/05/06", "4",  "67.45", "14:56:34" };
     vector<string> jack(jack_array.begin(), jack_array.end());
 
-    RowArray jim_array =  { "Jim Smith",  "21", "Senior",    "3.1", "2013/05/06", "-5", "20.19", "21:00:00" };
+    RowArray jim_array =  { "Jim Smith",  "21", "NULL",    "3.1", "2013/05/06", "-5", "20.19", "21:00:00" };
     vector<string> jim(jim_array.begin(), jim_array.end());
 
     RowArray bill_array = { "Bill Smith", "NULL","Junior",   "3.1", "2013/05/06", "-5", "20.19", "21:00:00" };
@@ -206,23 +224,6 @@ TEST_F(TableTest, CrossJoinHasAllAttributes) {
   EXPECT_THAT(joined.attributes(), ContainerEq(join_attributes));
 }
 
-MATCHER_P2(RecordEq, record, num_fields, "") {
-  for (int i = 0; i < num_fields; ++i) {
-    if (const_cast<Record&>(arg).retrieve(i) != record.retrieve(i))
-      return false;
-  }
-  return true;
-}
-
-// Does not detect if record has MORE fields than specified
-MATCHER_P(RecordElementsAre, container, "") {
-  for (unsigned i = 0; i < container.size(); ++i) {
-    if (const_cast<Record&>(arg).retrieve(i) != container[i])
-      return false;
-  }
-  return true;
-}
-
 TEST_F(TableTest, CrossJoinHasAllRows) {
   typedef array<string, 2> Row;
   typedef vector<string> Vec;
@@ -264,10 +265,15 @@ TEST_F(TableTest, CrossJoinHasAllRows) {
   }
 }
 
-/* Counting of attributes */
-TEST_F(TableTest, CountAttributeWorks) {
+/* count */
+TEST_F(TableTest, CountAttributeWorksForInt) {
   setup_shared_table_with_data();
   EXPECT_EQ(3, shared_table.count("Age"));
+}
+
+TEST_F(TableTest, CountAttributeWorksForString) {
+  setup_shared_table_with_data();
+  EXPECT_EQ(2, shared_table.count("Grade"));
 }
 
 TEST_F(TableTest, CountAttributeFailsForNonexistentAttribute) {
@@ -275,10 +281,20 @@ TEST_F(TableTest, CountAttributeFailsForNonexistentAttribute) {
   EXPECT_THROW(shared_table.count("Woo"), Error);
 }
 
-/* Summation of attirbutes */
-TEST_F(TableTest, SumWorks) {
+/* sum */
+TEST_F(TableTest, SumWorksForInt) {
   setup_shared_table_with_data();
-  EXPECT_EQ(61, shared_table.sum("Age"));
+  EXPECT_THAT(shared_table.sum("Age"), FloatEq(61));
+}
+
+TEST_F(TableTest, SumWorksForIntWithNegative) {
+  setup_shared_table_with_data();
+  EXPECT_THAT(shared_table.sum("BooksOwed"), FloatEq(-8));
+}
+
+TEST_F(TableTest, SumWorksForFloat) {
+  setup_shared_table_with_data();
+  EXPECT_THAT(shared_table.sum("DiningDollars"), FloatEq(125.36F));
 }
 
 TEST_F(TableTest, SumFailsForNonexistentAttribute) {
@@ -286,10 +302,15 @@ TEST_F(TableTest, SumFailsForNonexistentAttribute) {
   EXPECT_THROW(shared_table.sum("Woo"), Error);
 }
 
-/* Finding minimum attribute entry */
-TEST_F(TableTest, MinWorks) {
+/* min */
+TEST_F(TableTest, MinWorksForInt) {
   setup_shared_table_with_data();
-  EXPECT_EQ(19, shared_table.min("Age"));
+  EXPECT_THAT(shared_table.min("Age"), FloatEq(19));
+}
+
+TEST_F(TableTest, MinWorksForFloat) {
+  setup_shared_table_with_data();
+  EXPECT_THAT(shared_table.min("DiningDollars"), FloatEq(-1.28F));
 }
 
 TEST_F(TableTest, MinFailsForNonexistentAttribute) {
@@ -297,10 +318,15 @@ TEST_F(TableTest, MinFailsForNonexistentAttribute) {
   EXPECT_THROW(shared_table.min("Woo"), Error);
 }
 
-/* Finding maximum attribute entry */
-TEST_F(TableTest, MaxWorks) {
+/* max */
+TEST_F(TableTest, MaxWorksForInt) {
   setup_shared_table_with_data();
-  EXPECT_EQ(21, shared_table.max("Age"));
+  EXPECT_THAT(shared_table.max("Age"), FloatEq(21));
+}
+
+TEST_F(TableTest, MaxWorksForFloat) {
+  setup_shared_table_with_data();
+  EXPECT_THAT(shared_table.max("DiningDollars"), FloatEq(67.45F));
 }
 
 TEST_F(TableTest, MaxFailsForNonexistentAttribute) {

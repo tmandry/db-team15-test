@@ -1,6 +1,7 @@
 #ifndef __TABLE__TEAM15_
 #define __TABLE__TEAM15_
 
+#include "DllExportInclude.h"
 #include "Record.h"
 #include <string>
 #include <vector>
@@ -8,7 +9,7 @@
 
 using namespace std;  
 
-class Table
+class DBDLL_API Table
 {
 public:
 
@@ -26,6 +27,12 @@ public:
 	 * Default constructor to create a Table
 	 */
 	Table() {}
+
+	/**
+	 * Creates a table with the given attribute names and types
+	 * @param attributes A map<string, TYPE> containing the names of the attributes and Types
+	 */
+	Table(map<string, TYPE> attributes) {}
 
 	/**
 	 * Creates a table with the given attribute names and types
@@ -115,14 +122,14 @@ private:
 	vector<Record> records; /**< A vector containing all the records of the table */
 };
 
-class TableIterator
+class DBDLL_API TableIterator
 {
 public:
 	/**
 	 * Creates a table iterator with the given Table
 	 * @param table The table you want to iterate through\
 	 */
-	TableIterator(Table table);
+	TableIterator(Table table) {};
 
 	void first();	/**< Move to the first entry in the table */
 

@@ -151,8 +151,10 @@ TEST(QueryTest, HandlesWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
 }
 
 // SELECT *, WHERE !=
@@ -163,8 +165,14 @@ TEST(QueryTest, HandlesWhereNEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age != 19"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jack Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jim Smith");
 }
 
 // SELECT *, WHERE >
@@ -175,8 +183,14 @@ TEST(QueryTest, HandlesWhereGtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > 19"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jack Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jim Smith");
 }
 
 // SELECT *, WHERE <
@@ -187,8 +201,10 @@ TEST(QueryTest, HandlesWhereLtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age < 21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
 }
 
 // SELECT *, WHERE >=
@@ -199,8 +215,18 @@ TEST(QueryTest, HandlesWhereGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age >= 19"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jack Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jim Smith");
 }
 
 // SELECT *, WHERE <=
@@ -211,8 +237,10 @@ TEST(QueryTest, HandlesWhereLteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age <= 19"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
 }
 
 /* Multiple conditions on queries, there could be so many combinations here to test */
@@ -225,8 +253,10 @@ TEST(QueryTest, HandlesWhereEqAndEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 AND Name = 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
 }
 
 // SELECT *, WHERE > OR =
@@ -237,8 +267,18 @@ TEST(QueryTest, HandlesWhereEqOrEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > 19 OR Name = 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jack Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jim Smith");
 }
 
 // SELECT *, WHERE > NOT >=
@@ -249,8 +289,14 @@ TEST(QueryTest, HandlesWhereGteNotGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > 19 NOT GPA >= 4.0"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jack Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jim Smith");
 }
 
 // SELECT *, WHERE - 1 level of parenthesis
@@ -261,8 +307,14 @@ TEST(QueryTest, HandlesOneNestedWhereQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 OR ( Age >= 21 AND GPA = 3.2 )"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
+
+  it.next();
+  r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jack Smith");
 }
 
 // SELECT *, WHERE - 3 levels of parenthesis
@@ -273,8 +325,6 @@ TEST(QueryTest, HandlesTwoNestedWhereQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 AND ( Name = 'Jack Smith' OR ( GPA > 3.0 AND Grade = 'Senior' ) )"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
 }
 // SELECT *, WHERE - 3 levels of parenthesis
 TEST(QueryTest, HandlesThreeNestedWhereQuery) {
@@ -284,8 +334,10 @@ TEST(QueryTest, HandlesThreeNestedWhereQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '2013/05/06') )"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
 }
 
 /* Select some attributes, with conditions */
@@ -301,8 +353,10 @@ TEST(QueryTest, HandlesSelectWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("Name, Age", "students", "Age = 19"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table. Iterator is currently private.
+
+  TableIterator it(query);
+  Record r = it.getRecord();
+  EXPECT_EQ(r.retrieve(0), "Jane Smith");
 }
 
 /* Deleting of Data */
@@ -407,8 +461,6 @@ TEST(IntegerComparisonTest, HandlesWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE !=
@@ -419,8 +471,6 @@ TEST(IntegerComparisonTest, HandlesWhereNEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age != 21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >
@@ -431,8 +481,6 @@ TEST(IntegerComparisonTest, HandlesWhereGtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > 21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <
@@ -443,8 +491,6 @@ TEST(IntegerComparisonTest, HandlesWhereLtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age < 21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >=
@@ -455,8 +501,6 @@ TEST(IntegerComparisonTest, HandlesWhereGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age >= 21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <=
@@ -467,8 +511,6 @@ TEST(IntegerComparisonTest, HandlesWhereLteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age <= 21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 /******** Float comparison tests ********/
@@ -481,8 +523,6 @@ TEST(FloatComparisonTest, HandlesWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA = 3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE !=
@@ -493,8 +533,6 @@ TEST(FloatComparisonTest, HandlesWhereNEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA != 3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >
@@ -505,8 +543,6 @@ TEST(FloatComparisonTest, HandlesWhereGtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA > 3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <
@@ -517,8 +553,6 @@ TEST(FloatComparisonTest, HandlesWhereLtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA < 3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >=
@@ -529,8 +563,6 @@ TEST(FloatComparisonTest, HandlesWhereGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA >= 3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <=
@@ -541,8 +573,6 @@ TEST(FloatComparisonTest, HandlesWhereLteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA <= 3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 /******** Negative integer comparison tests ********/
@@ -555,8 +585,6 @@ TEST(NegativeIntegerComparisonTest, HandlesWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = -21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE !=
@@ -567,8 +595,6 @@ TEST(NegativeIntegerComparisonTest, HandlesWhereNEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age != -21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >
@@ -579,8 +605,6 @@ TEST(NegativeIntegerComparisonTest, HandlesWhereGtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age > -21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <
@@ -591,8 +615,6 @@ TEST(NegativeIntegerComparisonTest, HandlesWhereLtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age < -21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >=
@@ -603,8 +625,6 @@ TEST(NegativeIntegerComparisonTest, HandlesWhereGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age >= -21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <=
@@ -615,8 +635,6 @@ TEST(NegativeIntegerComparisonTest, HandlesWhereLteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Age <= -21"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 /******** Negative float comparison tests ********/
@@ -629,8 +647,6 @@ TEST(NegativeFloatComparisonTest, HandlesWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA = -3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE !=
@@ -641,8 +657,6 @@ TEST(NegativeFloatComparisonTest, HandlesWhereNEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA != -3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >
@@ -653,8 +667,6 @@ TEST(NegativeFloatComparisonTest, HandlesWhereGtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA > -3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <
@@ -665,8 +677,6 @@ TEST(NegativeFloatComparisonTest, HandlesWhereLtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA < -3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >=
@@ -677,8 +687,6 @@ TEST(NegativeFloatComparisonTest, HandlesWhereGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA >= -3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <=
@@ -689,8 +697,6 @@ TEST(NegativeFloatComparisonTest, HandlesWhereLteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GPA <= -3.1"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 /******** Date comparison tests ********/
@@ -703,8 +709,6 @@ TEST(DateComparisonTest, HandlesWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate = 2015/05/06"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE !=
@@ -715,8 +719,6 @@ TEST(DateComparisonTest, HandlesWhereNEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate != 2015/05/06"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >
@@ -727,8 +729,6 @@ TEST(DateComparisonTest, HandlesWhereGtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate > 2015/05/06"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 0);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <
@@ -739,8 +739,6 @@ TEST(DateComparisonTest, HandlesWhereLtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate < 2015/05/06"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >=
@@ -751,8 +749,6 @@ TEST(DateComparisonTest, HandlesWhereGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate >= 2015/05/06"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <=
@@ -763,8 +759,6 @@ TEST(DateComparisonTest, HandlesWhereLteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate <= 3.0"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 3);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 /******** String comparison tests ********/
@@ -777,8 +771,6 @@ TEST(StringComparisonTest, HandlesWhereEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Name = 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE !=
@@ -789,8 +781,6 @@ TEST(StringComparisonTest, HandlesWhereNEqQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Name != 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >
@@ -801,8 +791,6 @@ TEST(StringComparisonTest, HandlesWhereGtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Name > 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <
@@ -813,8 +801,6 @@ TEST(StringComparisonTest, HandlesWhereLtQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Name < 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 1);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE >=
@@ -825,8 +811,6 @@ TEST(StringComparisonTest, HandlesWhereGteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Name >= 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }
 
 // SELECT *, WHERE <=
@@ -837,6 +821,4 @@ TEST(StringComparisonTest, HandlesWhereLteQuery) {
   EXPECT_NO_THROW(query = database.query("*", "students", "Name <= 'Jane Smith'"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
   EXPECT_EQ(query.size(), 2);
-  // Need a way to test that the correct record was returned, but there is no
-  // way to get individual records from a table
 }

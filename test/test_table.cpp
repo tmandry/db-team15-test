@@ -58,20 +58,27 @@ protected:
     return 4;
   }
 
+  // Setup a simple table with a single column and 9 rows that are numbered by that column
+  void setup_numbered_table() {
+    vector<pair<string, Table::TYPE>> attribute;
+    attribute.push_back(make_pair("Num", Table::INT));
+    shared_table = Table(attribute);
+
+    for (int i = 1; i <= 9; ++i) {
+      vector<string> element;
+      element.push_back("0");
+      element[0] += i;
+      shared_table.insert(element);
+    }
+  }
+
   typedef array<string, 8> RowArray;
+  typedef vector<pair<string, Table::TYPE>> AttributeList;
 
   Table shared_table;
-  vector<pair<string, Table::TYPE>> shared_attributes;
+  AttributeList shared_attributes;
   vector<string> single_record;
 };
-
-/* Test Construction of Tables */
-TEST_F(TableTest, DefaultConstructorCreatesEmptyTableWithNoRows) {
-  Table* table;
-  EXPECT_NO_THROW(table = new Table());
-  EXPECT_EQ(table->size(), 0);
-  delete table;
-}
 
 TEST_F(TableTest, ConstructorCreatesPredefinedTableWithNoRows) {
   EXPECT_NO_THROW(setup_shared_table());
@@ -139,11 +146,54 @@ TEST_F(TableTest, RenameFailsForNonexistentAttribute) {
   EXPECT_FALSE(shared_table.rename("anothercolumn", "somethingelse"));
 }
 
+TEST_F(TableTest, IteratorPointsToFirstRowAutomatically) {
+  setup_numbered_table();
+  TableIterator it(shared_table);
+  EXPECT_EQ(it.getRecord().retrieve(0), "0");
+}
+
+TEST_F(TableTest, IteratorNextWorks) {
+  setup_numbered_table();
+  TableIterator it(shared_table);
+  it.first(); // should be a no-op
+
+  for (int i = 1; i <= 9; ++i) {
+    string val = "0";
+    val[0] += i;
+
+    EXPECT_EQ(it.getRecord().retrieve(0), val);
+    if (i == 9)
+      EXPECT_FALSE(it.next());
+    else
+      EXPECT_TRUE(it.next());
+  }
+}
+
+TEST_F(TableTest, IteratorFirstWorks) {
+  setup_numbered_table();
+  TableIterator it(shared_table);
+
+  // advance all the way through table, then go back to start
+  while (it.next());
+  it.first();
+
+  for (int i = 1; i <= 9; ++i) {
+    string val = "0";
+    val[0] += i;
+
+    EXPECT_EQ(it.getRecord().retrieve(0), val);
+    if (i == 9)
+      EXPECT_FALSE(it.next());
+    else
+      EXPECT_TRUE(it.next());
+  }
+}
+
 /* Test the joining of two tables */
 TEST_F(TableTest, CrossJoinHasAllAttributes) {
   setup_shared_table();
 
-  vector<pair<string, Table::TYPE>> attributes;
+  AttributeList attributes;
   attributes.push_back(make_pair("abc", Table::DATE));
   attributes.push_back(make_pair("def", Table::INT));
   attributes.push_back(make_pair("ghi", Table::STRING));
@@ -151,10 +201,67 @@ TEST_F(TableTest, CrossJoinHasAllAttributes) {
 
   Table joined = shared_table.crossJoin(other_table);
 
-  vector<pair<string, Table::TYPE>> join_attributes(shared_attributes);
+  AttributeList join_attributes(shared_attributes);
   join_attributes.insert(join_attributes.end(), attributes.begin(), attributes.end());
-  sort(join_attributes.begin(), join_attributes.end());
   EXPECT_THAT(joined.attributes(), ContainerEq(join_attributes));
+}
+
+MATCHER_P2(RecordEq, record, num_fields, "") {
+  for (int i = 0; i < num_fields; ++i) {
+    if (const_cast<Record&>(arg).retrieve(i) != record.retrieve(i))
+      return false;
+  }
+  return true;
+}
+
+// Does not detect if record has MORE fields than specified
+MATCHER_P(RecordElementsAre, container, "") {
+  for (unsigned i = 0; i < container.size(); ++i) {
+    if (const_cast<Record&>(arg).retrieve(i) != container[i])
+      return false;
+  }
+  return true;
+}
+
+TEST_F(TableTest, CrossJoinHasAllRows) {
+  typedef array<string, 2> Row;
+  typedef vector<string> Vec;
+
+  AttributeList a_attrs;
+  a_attrs.push_back(make_pair("A1", Table::STRING));
+  a_attrs.push_back(make_pair("A2", Table::STRING));
+  AttributeList b_attrs;
+  b_attrs.push_back(make_pair("B1", Table::STRING));
+  b_attrs.push_back(make_pair("B2", Table::STRING));
+  Table a(a_attrs);
+  Table b(b_attrs);
+
+  Row ra1 = {"a", "b"};
+  Row ra2 = {"NULL", "c"};
+  Row rb1 = {"NULL", "NULL"};
+  Row rb2 = {"d", "e"};
+  a.insert(Vec(ra1.begin(), ra1.end()));
+  a.insert(Vec(ra2.begin(), ra2.end()));
+  b.insert(Vec(rb1.begin(), rb1.end()));
+  b.insert(Vec(rb2.begin(), rb2.end()));
+
+  Table joined = a.crossJoin(b);
+
+  EXPECT_EQ(joined.size(), 4);
+
+  array<array<string, 2>, 2> rows = {{ {"a", "b"}, {"NULL", "c"} }};
+
+  array<array<string, 4>, 4> expected_records = {{
+    {"a", "b", "NULL", "NULL"},
+    {"a", "b", "d", "e"},
+    {"NULL", "c", "NULL", "NULL"},
+    {"NULL", "c", "d", "e"}
+  }};
+  TableIterator iterator(joined);
+  for (array<string, 4> record : expected_records) {
+    EXPECT_THAT(iterator.getRecord(), RecordElementsAre(record));
+    iterator.next();
+  }
 }
 
 /* Counting of attributes */

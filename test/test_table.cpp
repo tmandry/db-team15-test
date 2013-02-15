@@ -103,6 +103,11 @@ TEST_F(TableTest, ConstructorCreatesPredefinedTableWithNoRows) {
   EXPECT_EQ(shared_table.size(), 0);
 }
 
+TEST_F(TableTest, DefaultConstructorCreatesNoAttributes) {
+	Table t;
+	EXPECT_EQ(t.attributes().size(), 0);
+}
+
 /* Test Adding attributes to Table */
 TEST_F(TableTest, AddWorks) {
   setup_shared_table();
@@ -265,18 +270,49 @@ TEST_F(TableTest, CrossJoinHasAllRows) {
   }
 }
 
+TEST_F(TableTest, CrossJoinHasNoRowsWhenOneTableIsEmpty) {
+  typedef array<string, 2> Row;
+  typedef vector<string> Vec;
+
+  AttributeList a_attrs;
+  a_attrs.push_back(make_pair("A1", Table::STRING));
+  a_attrs.push_back(make_pair("A2", Table::STRING));
+  AttributeList b_attrs;
+  b_attrs.push_back(make_pair("B1", Table::STRING));
+  b_attrs.push_back(make_pair("B2", Table::STRING));
+  Table a(a_attrs);
+  Table b(b_attrs);
+
+  Row ra1 = {"a", "b"};
+  Row ra2 = {"NULL", "c"};
+  a.insert(Vec(ra1.begin(), ra1.end()));
+  a.insert(Vec(ra2.begin(), ra2.end()));
+
+  Table joined = a.crossJoin(b);
+
+  EXPECT_EQ(joined.size(), 0);
+}
+
 /* count */
-TEST_F(TableTest, CountAttributeWorksForInt) {
+TEST_F(TableTest, CountWorksForInt) {
   setup_shared_table_with_data();
   EXPECT_EQ(3, shared_table.count("Age"));
 }
 
-TEST_F(TableTest, CountAttributeWorksForString) {
+TEST_F(TableTest, CountWorksForString) {
   setup_shared_table_with_data();
   EXPECT_EQ(2, shared_table.count("Grade"));
 }
 
-TEST_F(TableTest, CountAttributeFailsForNonexistentAttribute) {
+TEST_F(TableTest, CountReturnsZeroForEmptyTable) {
+  AttributeList a_attrs;
+  a_attrs.push_back(make_pair("A1", Table::STRING));
+  Table a(a_attrs);
+
+  EXPECT_EQ(a.count("A1"), 0);
+}
+
+TEST_F(TableTest, CountFailsForNonexistentAttribute) {
   setup_shared_table_with_data();
   EXPECT_THROW(shared_table.count("Woo"), Error);
 }
@@ -295,6 +331,14 @@ TEST_F(TableTest, SumWorksForIntWithNegative) {
 TEST_F(TableTest, SumWorksForFloat) {
   setup_shared_table_with_data();
   EXPECT_THAT(shared_table.sum("DiningDollars"), FloatEq(125.36F));
+}
+
+TEST_F(TableTest, SumReturnsZeroForEmptyTable) {
+  AttributeList a_attrs;
+  a_attrs.push_back(make_pair("A1", Table::INT));
+  Table a(a_attrs);
+
+  EXPECT_EQ(a.sum("A1"), 0);
 }
 
 TEST_F(TableTest, SumFailsForNonexistentAttribute) {

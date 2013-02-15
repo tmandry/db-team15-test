@@ -32,7 +32,8 @@ void setup_shared_record() {
 
 /* Test Construction of Records */
 TEST(RecordConstructionTest, CreatesEmptyRecord) {
-  EXPECT_NO_THROW(Record());
+  vector<string> attributes;
+  EXPECT_NO_THROW(Record(attributes));
 }
 
 TEST(RecordConstructionTest, CreatesPredefinedRecord) {
@@ -45,7 +46,7 @@ TEST(RecordRetrievalTest, RetrievesStringAttribute) {
   setup_shared_record();
 
   EXPECT_EQ("Ol' Rock",     shared_record.retrieveRecord(0));
-  EXPECT_EQ("Super Senior", shared_record.retieiveRecord(2));
+  EXPECT_EQ("Super Senior", shared_record.retrieveRecord(2));
 
   EXPECT_EQ("Ol' Rock",     shared_record.retrieve(0));
   EXPECT_EQ("Super Senior", shared_record.retrieve(2));

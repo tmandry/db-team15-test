@@ -28,7 +28,7 @@ vector<pair<string, Table::TYPE> > get_attribute_pairs() {
   vector<Table::TYPE> types = get_attribute_types();
 
   vector<pair<string, Table::TYPE> > pairs;
-  for(int i = 0; i < names.size(); i++) {
+  for(unsigned i = 0; i < names.size(); i++) {
     pairs.push_back( make_pair(names[i], types[i]));
   }
 

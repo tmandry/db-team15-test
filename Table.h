@@ -3,6 +3,7 @@
 
 #include "DllExportInclude.h"
 #include "Record.h"
+#include <utility>
 #include <string>
 #include <vector>
 #include <map>
@@ -32,7 +33,7 @@ public:
 	 * Creates a table with the given attribute names and types
 	 * @param attributes A map<string, TYPE> containing the names of the attributes and Types
 	 */
-	Table(map<string, TYPE> attributes) {}
+	Table(vector<pair<string, TYPE>> attributes) {}
 
 	/**
 	 * Creates a table with the given attribute names and types
@@ -67,7 +68,7 @@ public:
 	 * Get the attributes of a table
 	 * @return Returns map<string, TYPE> of the table attribute names and types
 	 */
-	map<string, TYPE> attributes();
+	vector<pair<string, TYPE>> attributes();
 
 	/**
 	 * Get the size of the table

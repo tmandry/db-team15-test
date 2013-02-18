@@ -38,9 +38,8 @@ protected:
     shared_attributes.push_back(make_pair("GraduationDate", Table::DATE));
     shared_attributes.push_back(make_pair("BooksOwed", Table::INT));
     shared_attributes.push_back(make_pair("DiningDollars", Table::FLOAT));
-    shared_attributes.push_back(make_pair("LastLoginDate", Table::DATE));
 
-    RowArray jane_array = { "Jane Smith", "19", "Sophomore", "2.8", "2015/05/06", "-2", "-1.28", "01:44:12" };
+    RowArray jane_array = { "Jane Smith", "19", "Sophomore", "2.8", "2015/05/06", "-2", "-1.28" };
     single_record = vector<string>(jane_array.begin(), jane_array.end());
   }
 
@@ -57,16 +56,16 @@ protected:
   int setup_shared_table_with_data() {
     setup_shared_table();
 
-    RowArray jane_array = { "Jane Smith", "19", "Sophomore", "2.8", "2015/05/06", "-2", "-1.28", "01:44:12" };
+    RowArray jane_array = { "Jane Smith", "19", "Sophomore", "2.8", "2015/05/06", "-2", "-1.28" };
     vector<string> jane(jane_array.begin(), jane_array.end());
 
-    RowArray jack_array = { "Jack Smith", "21", "NULL",    "3.2", "2013/05/06", "4",  "67.45", "14:56:34" };
+    RowArray jack_array = { "Jack Smith", "21", "NULL",    "3.2", "2013/05/06", "4",  "67.45" };
     vector<string> jack(jack_array.begin(), jack_array.end());
 
-    RowArray jim_array =  { "Jim Smith",  "21", "NULL",    "3.1", "2013/05/06", "-5", "20.19", "21:00:00" };
+    RowArray jim_array =  { "Jim Smith",  "21", "NULL",    "3.1", "2013/05/06", "-5", "20.19" };
     vector<string> jim(jim_array.begin(), jim_array.end());
 
-    RowArray bill_array = { "Bill Smith", "NULL","Junior",   "3.1", "2013/05/06", "-5", "20.19", "21:00:00" };
+    RowArray bill_array = { "Bill Smith", "NULL","Junior",   "3.1", "2013/05/06", "-5", "20.19" };
     vector<string> bill(bill_array.begin(), bill_array.end());
 
     shared_table.insert(jane);
@@ -90,7 +89,7 @@ protected:
     }
   }
 
-  typedef array<string, 8> RowArray;
+  typedef array<string, 7> RowArray;
   typedef vector<pair<string, Table::TYPE>> AttributeList;
 
   Table shared_table;

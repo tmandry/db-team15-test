@@ -84,7 +84,7 @@ protected:
     for (int i = 1; i <= 9; ++i) {
       vector<string> element;
       element.push_back("0");
-      element[0] += i;
+      element.back()[0] += i;
       shared_table.insert(element);
     }
   }
@@ -171,7 +171,7 @@ TEST_F(TableTest, RenameFailsForNonexistentAttribute) {
 TEST_F(TableTest, IteratorPointsToFirstRowAutomatically) {
   setup_numbered_table();
   TableIterator it(shared_table);
-  EXPECT_EQ(it.getRecord().retrieve(0), "0");
+  EXPECT_EQ(it.getRecord().retrieve(0), "1");
 }
 
 TEST_F(TableTest, IteratorNextWorks) {
@@ -329,7 +329,7 @@ TEST_F(TableTest, SumWorksForIntWithNegative) {
 
 TEST_F(TableTest, SumWorksForFloat) {
   setup_shared_table_with_data();
-  EXPECT_THAT(shared_table.sum("DiningDollars"), FloatEq(125.36F));
+  EXPECT_THAT(shared_table.sum("DiningDollars"), FloatEq(106.55F));
 }
 
 TEST_F(TableTest, SumReturnsZeroForEmptyTable) {

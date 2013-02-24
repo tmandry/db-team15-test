@@ -86,10 +86,12 @@
   <ItemGroup>
     <ClInclude Include="menu.h" />
     <ClInclude Include="restaurantapp.h" />
+    <ClInclude Include="string_tokenizer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="restaurantapp.cpp" />
+    <ClCompile Include="string_tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Team15DatabaseDll\Team15DatabaseDll.vcxproj">

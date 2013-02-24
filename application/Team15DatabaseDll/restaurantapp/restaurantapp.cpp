@@ -2,9 +2,14 @@
 //
 
 #include "stdafx.h"
+#include <iostream>
+#include "../Debug/Team15DatabaseDll.dll"
+
+using namespace std;
 
 
-int _tmain(int argc, _TCHAR* argv[])
+
+int main()
 {
 	return 0;
 }

@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "menu.h"
+#include "inputdata.h"
 
 int main()
 {

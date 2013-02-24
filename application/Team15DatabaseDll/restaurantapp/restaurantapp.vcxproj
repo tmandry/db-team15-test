@@ -84,9 +84,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="menu.h" />
     <ClInclude Include="restaurantapp.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="restaurantapp.cpp" />
   </ItemGroup>
   <ItemGroup>

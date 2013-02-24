@@ -10,9 +10,9 @@ using namespace std;
 
 void my_func(vector<string> args) {cout << "Doing stuff!\n";}
 
-typedef tuple<string, Menu::CommandFunc> CommandDescriptor;
 // Define commands here, each with a tuple of the command name and a function
 // that takes a vector<string> of arguments and implements the command.
+typedef tuple<string, Menu::CommandFunc> CommandDescriptor;
 // You must update the number of commands in the line below.
 static const array<CommandDescriptor, 1> COMMANDS = {
   make_tuple("dostuff", my_func)
@@ -47,6 +47,7 @@ void Menu::run()
     }
 
     if (command == "exit") break;
+
     auto cmd_it = commands_.find(command);
     if (cmd_it == commands_.end()) {
       cout << "Command not found." << endl;

@@ -16,10 +16,12 @@ returnRecord read_data(string filename)
 		vector<string> fields;
 		StringTokenizer tokenized_line(line); 
 		tokenized_line.set_delim(',');
+
 		while(!tokenized_line.at_end()) { // push tokens from each line into vector
 			string field = tokenized_line.next_token();
 			fields.push_back(field);
 		}
+
 		Record new_record(fields);
     if(first_line) {
       record.fields = fields; // return the column labels

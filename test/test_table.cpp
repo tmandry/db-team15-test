@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "../Table.h"
-#include "../Error.h"
+#include "Table.h"
+#include "Error.h"
 #include <string>
 #include <vector>
 #include <array>

@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "../Record.h"
-#include "../Error.h"
+#include "Record.h"
+#include "Error.h"
 
 #include <string>
 #include <vector>

@@ -1,6 +1,6 @@
 #include "gmock/gmock.h"
-#include "../Database.h"
-#include "../Table.h"
+#include "Database.h"
+#include "Table.h"
 
 #include <vector>
 #include <string>
@@ -59,7 +59,7 @@ Database get_basic_database() {
 
 /* Construction of Database */
 TEST(DatabaseConstructionTest, CreatesEmptyDatabase) {
-  EXPECT_NO_THROW(Database());
+   EXPECT_NO_THROW(Database());
 }
 
 /* Managment of Tables */

@@ -6,4 +6,4 @@
 
 using namespace std;
 
-Record read_data(string filename);
+vector<Record> read_data(string filename);

@@ -85,12 +85,15 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="data_loader.h" />
     <ClInclude Include="inputdata.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="restaurantapp.h" />
     <ClInclude Include="string_tokenizer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="data_loader.cpp" />
+    <ClCompile Include="inputdata.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="restaurantapp.cpp" />
     <ClCompile Include="string_tokenizer.cpp" />

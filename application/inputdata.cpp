@@ -19,5 +19,5 @@ vector<Record> read_data(string filename)
 		}
 		
 	}
-	return;
+	return vector<Record>();
 }

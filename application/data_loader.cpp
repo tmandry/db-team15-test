@@ -4,9 +4,15 @@
 #include <vector>
 #include <array>
 
-typedef array<tuple<string, Table::TYPE>> TableDescriptor;
+#include "Table.h"
+#include "Database.h"
 
-static const TableDescriptor MY_TABLE = {
+template<int Num>
+struct TableDescriptor {
+  typedef array<tuple<string, Table::TYPE>, Num> type;
+};
+
+static const TableDescriptor<2>::type MY_TABLE = {
   make_tuple("name", Table::STRING),
   make_tuple("age", Table::INT)
 };

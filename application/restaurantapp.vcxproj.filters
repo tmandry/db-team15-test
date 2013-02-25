@@ -30,6 +30,9 @@
     <ClInclude Include="inputdata.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="data_loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="restaurantapp.cpp">
@@ -39,6 +42,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="string_tokenizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="inputdata.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="data_loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -33,6 +33,9 @@
     <ClInclude Include="data_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="restaurant_printer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="restaurantapp.cpp">

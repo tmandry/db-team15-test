@@ -89,6 +89,7 @@
     <ClInclude Include="inputdata.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="restaurantapp.h" />
+    <ClInclude Include="restaurant_printer.h" />
     <ClInclude Include="string_tokenizer.h" />
   </ItemGroup>
   <ItemGroup>

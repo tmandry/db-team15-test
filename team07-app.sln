@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Team15DatabaseDll", "database\Team15DatabaseDll.vcxproj", "{BF38208D-1237-413C-9F9A-9407A1C4413C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "restaurantapp", "application\restaurantapp.vcxproj", "{348F8EAA-CDC9-446C-9EB0-056042CB76F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF38208D-1237-413C-9F9A-9407A1C4413C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BF38208D-1237-413C-9F9A-9407A1C4413C}.Debug|Win32.Build.0 = Debug|Win32
+		{BF38208D-1237-413C-9F9A-9407A1C4413C}.Release|Win32.ActiveCfg = Release|Win32
+		{BF38208D-1237-413C-9F9A-9407A1C4413C}.Release|Win32.Build.0 = Release|Win32
+		{348F8EAA-CDC9-446C-9EB0-056042CB76F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{348F8EAA-CDC9-446C-9EB0-056042CB76F5}.Debug|Win32.Build.0 = Debug|Win32
+		{348F8EAA-CDC9-446C-9EB0-056042CB76F5}.Release|Win32.ActiveCfg = Release|Win32
+		{348F8EAA-CDC9-446C-9EB0-056042CB76F5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

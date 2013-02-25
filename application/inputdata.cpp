@@ -2,22 +2,30 @@
 
 using namespace std; 
 
-vector<Record> read_data(string filename)
+returnRecord read_data(string filename)
 {
+  returnRecord record; 
 	ifstream data_file;
 	string line;
 	data_file.open(filename);
+	vector<Record> record_vector;
+  bool first_line = true;
 
 	// look through each line
 	while(getline(data_file, line)) {
-		vector<string> values;
+		vector<string> fields;
 		StringTokenizer tokenized_line(line); 
 		tokenized_line.set_delim(',');
 		while(!tokenized_line.at_end()) { // push tokens from each line into vector
-			string entry = tokenized_line.next_token();
-			values.push_back(entry);
+			string field = tokenized_line.next_token();
+			fields.push_back(field);
 		}
-		
+		Record new_record(fields);
+    if(first_line) {
+      record.fields = fields; // return the column labels
+    }
+		record.record_vector.push_back(new_record);
+    first_line = false;
 	}
-	return vector<Record>();
+	return record;
 }

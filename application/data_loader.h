@@ -24,5 +24,7 @@ public:
 
 private:
   template<int Num>
-  Table* load_table(string filename, TableDescriptor<Num>* descriptor);
+  void load_table(string filename, TableDescriptor<Num>* descriptor);
+
+  Database *db_;
 };

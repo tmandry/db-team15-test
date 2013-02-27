@@ -60,13 +60,26 @@ void RestaurantPrinter::print_restaurants_that_accept(string payment_type) {
 
 void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float minimum_rating) {
   Table restaurants = query("*", "geoplaces2", "");
-  vector<Table> restaurants_with_min_average;
+
+  // create a table with the same structure as rating_final
+  Table restaurants_with_min_average(query("*", "rating_final", ""));
 
   auto find_average = [&] (Record &record) {
     Table ratings = query("*", "rating_final", "placeID = " + record.retrieve(0));
     float average = ratings.sum("rating") / ratings.count("rating");
-    if (average > minimum_rating)
-      restaurants_with_min_average.push_back(ratings);
+    // if it meets the minimum we want to insert the FIRST instance of the rating
+    // into the table so that the placeID is present once, and can be passed to
+    // lookup_and_combine_restaurant_tables()
+    if (average > minimum_rating) {
+      TableIterator it(ratings);
+      it.first();
+      Record record = it.getRecord();
+      vector<string> attributes;
+      for (int i = 0; i < record.size(); i++) {
+        attributes.push_back(record.retrieve(i));
+      }
+      restaurants_with_min_average.insert(attributes);
+    }
   };
   for_each_record(restaurants, find_average);
 

@@ -30,7 +30,6 @@ private:
   void print_table(string title, Table table);
   void for_each_record(Table &table, function<void (Record&)> procedure);
   Table lookup_and_combine_restaurant_tables(Table placeIDs);
-  Table combine_tables(vector<Table> tables);
 
   Database *database_;
 };

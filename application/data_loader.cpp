@@ -98,8 +98,9 @@ static const TableDescriptor<19>::type USER_PROFILE = {
   make_pair("height", Table::FLOAT)
 };
 
-DataLoader::DataLoader(string data_dir) {
-
+DataLoader::DataLoader(string data_dir)
+  : data_dir_(data_dir)
+{
 }
 
 DataLoader::~DataLoader() {}
@@ -121,7 +122,7 @@ Database* DataLoader::load() {
 template<typename D>
 void DataLoader::load_table(string filename, string table_name, const D& descriptor) {
   vector<pair<string, Table::TYPE>> spec(descriptor.begin(), descriptor.end());
-  vector<Record> records = read_data(filename).record_vector;
+  vector<Record> records = read_data(data_dir_+"\\"+filename).record_vector;
   Table table = Table(spec);
   //for (const Record& record : records)
   //  table->insert(record);

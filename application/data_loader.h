@@ -22,4 +22,5 @@ private:
   void load_table(string filename, string table_name, const D& descriptor);
 
   Database *db_;
+  string data_dir_;
 };

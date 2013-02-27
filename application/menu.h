@@ -6,10 +6,12 @@
 
 using namespace std;
 
+class Database;
+
 class Menu
 {
 public:
-  Menu();
+  Menu(Database *db);
   virtual ~Menu();
 
   void run();
@@ -18,5 +20,6 @@ public:
 
 private:
   map<string, CommandFunc> commands_;
+  Database *db_;
 };
 

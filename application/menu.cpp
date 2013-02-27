@@ -18,7 +18,8 @@ static const array<CommandDescriptor, 1> COMMANDS = {
   make_tuple("dostuff", my_func)
 };
 
-Menu::Menu()
+Menu::Menu(Database *db)
+  : db_(db)
 {
   // build map of commands
   for (const CommandDescriptor& cmd : COMMANDS) {

@@ -70,7 +70,7 @@ void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float min
   };
   for_each_record(restaurants, find_average);
 
-  print_table("Restaurants With Minimum Average Rating", combine_tables(restaurants_with_min_average));
+  print_table("Restaurants With Minimum Average Rating", lookup_and_combine_restaurant_tables(restaurants_with_min_average));
 }
 
 // Prints all columns of a table to stdout
@@ -78,16 +78,14 @@ void RestaurantPrinter::print_table(string title, Table table) {
   cout << "*******\t" << title << "\t*******" << endl << endl;
 
   bprinter::TablePrinter tp(&std::cout);
-  for (auto name_type : table.attributes()) {
+  for (auto name_type : table.attributes())
     tp.AddColumn(name_type.first, 25);
-  }
   tp.PrintHeader();
 
   // prints a row of all attributes in the record
   auto print_record = [&] (Record &record) {
-    for (int i = 0; i < record.size(); i++) {
+    for (int i = 0; i < record.size(); i++)
       tp << record.retrieve(i);
-    }
   };
 
   for_each_record(table, print_record);
@@ -111,7 +109,7 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
   it.first();
   procedure(it.getRecord());
 
-  // iterator through the rest
+  // iterate through the rest
   for (int i = 1; i < table.size(); i++) {
     it.next();
     procedure(it.getRecord());
@@ -131,24 +129,4 @@ Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table placeIDs) {
   for_each_record(placeIDs, build_where_clause);
 
   return query("*", "geoplaces2", where_clause);
-}
-
-// Combines tables that have the same columns into one table.
-Table RestaurantPrinter::combine_tables(vector<Table> tables) {
-  if (tables.size() > 0) {
-    Table results(tables[0].attributes());
-    for (Table table : tables) {
-      auto insert_into_results = [&] (Record &record) {
-        vector<string> attributes;
-        for (int i = 0; i < record.size(); i++) {
-          attributes.push_back(record.retrieve(i));
-        }
-        results.insert(attributes);
-      };
-      for_each_record(table, insert_into_results);
-    }
-    return results;
-  } else {
-    return Table();
-  }
 }

@@ -18,32 +18,39 @@ Database* RestaurantPrinter::get_database() {
 }
 
 void RestaurantPrinter::print_customer(string customer_id) {
-  print_table("Customer Information: " + customer_id, query("*", "userprofile", "userID = " + customer_id));
+  print_table("Customer Information: " + customer_id, database_->query("*", "userprofile", "userID = " + customer_id));
 }
 
 void RestaurantPrinter::print_customer_ratings(string customer_id) {
-  print_table("Customer Ratings: " + customer_id, query("*", "rating_final", "userID = " + customer_id));
+  print_table("Customer Ratings: " + customer_id, database_->query("*", "rating_final", "userID = " + customer_id));
 }
 
 void RestaurantPrinter::print_customers_with_at_least_budget(string minimum_budget) {
-  print_table("Customers With Minimum Budget: " + minimum_budget, query("*", "userprofile", "budget >= " + minimum_budget));
+  print_table("Customers With Minimum Budget: " + minimum_budget, database_->query("*", "userprofile", "budget >= " + minimum_budget));
 }
 
 void RestaurantPrinter::print_restaurant(string restaurant_name) {
-  print_table("Restaurant Information: " + restaurant_name, query("*", "geoplaces2", "name = '" + restaurant_name + "'"));
+  print_table("Restaurant Information: " + restaurant_name, database_->query("*", "geoplaces2", "name = '" + restaurant_name + "'"));
 }
 
 void RestaurantPrinter::print_restaurant_ratings(string restaurant_name) {
   // may be able to use a join here (wasn't sure how to select just the
-  // attributes on the rating_final table and join in one query)
-  Table restaurant = query("placeID", "geoplaces2", "name = '" + restaurant_name + "'");
+  // attributes on the rating_final table and join in one database_->query)
+  Table restaurant = database_->query("placeID", "geoplaces2", "name = '" + restaurant_name + "'");
   TableIterator it(restaurant);
   it.first();
-  print_table("Ratings for Restaurant: " + restaurant_name, query("*", "rating_final", "placeID = " + it.getRecord().retrieve(0)));
+  print_table("Ratings for Restaurant: " + restaurant_name, database_->query("userID, rating, food_rating, service_rating", "rating_final", "placeID = " + it.getRecord().retrieve(0)));
+}
+
+void RestaurantPrinter::print_restaurant_hours(string restaurant_name) {
+  Table restaurant = database_->query("placeID", "geoplaces2", "name = '" + restaurant_name + "'");
+  TableIterator it(restaurant);
+  it.first();
+  print_table("Hours for Restaurant: " + restaurant_name, database_->query("hours, days", "chefmozhours4", "placeID = " + it.getRecord().retrieve(0)));
 }
 
 void RestaurantPrinter::print_restaurants_with_cuisine(string cuisine) {
-  Table restaurants = query("placeID", "chefmozcuisine", "Rcuisine = '" + cuisine + "'");
+  Table restaurants = database_->query("placeID", "chefmozcuisine", "Rcuisine = '" + cuisine + "'");
 
   Table results = lookup_and_combine_restaurant_tables(restaurants);
 
@@ -51,7 +58,7 @@ void RestaurantPrinter::print_restaurants_with_cuisine(string cuisine) {
 }
 
 void RestaurantPrinter::print_restaurants_that_accept(string payment_type) {
-  Table restaurants = query("placeID", "chefmozaccepts", "Rpayment = '" + payment_type + "'");
+  Table restaurants = database_->query("placeID", "chefmozaccepts", "Rpayment = '" + payment_type + "'");
 
   Table results = lookup_and_combine_restaurant_tables(restaurants);
 
@@ -59,13 +66,13 @@ void RestaurantPrinter::print_restaurants_that_accept(string payment_type) {
 }
 
 void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float minimum_rating) {
-  Table restaurants = query("*", "geoplaces2", "");
+  Table restaurants = database_->query("*", "geoplaces2", "");
 
   // create a table with the same structure as rating_final
-  Table restaurants_with_min_average(query("*", "rating_final", ""));
+  Table restaurants_with_min_average(database_->query("*", "rating_final", ""));
 
   auto find_average = [&] (Record &record) {
-    Table ratings = query("*", "rating_final", "placeID = " + record.retrieve(0));
+    Table ratings = database_->query("*", "rating_final", "placeID = " + record.retrieve(0));
     float average = ratings.sum("rating") / ratings.count("rating");
     // if it meets the minimum we want to insert the FIRST instance of the rating
     // into the table so that the placeID is present once, and can be passed to
@@ -84,6 +91,13 @@ void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float min
   for_each_record(restaurants, find_average);
 
   print_table("Restaurants With Minimum Average Rating", lookup_and_combine_restaurant_tables(restaurants_with_min_average));
+}
+
+void RestaurantPrinter::print_all_restaurant_customer_combinations() {
+  Table restaurants = database_->query("name", "geoplaces2", "");
+  Table customers = database_->query("userID", "userprofile", "");
+
+  print_table("All Restaurant-Customer Combinations", restaurants.crossJoin(customers));
 }
 
 // Prints all columns of a table to stdout
@@ -107,10 +121,6 @@ void RestaurantPrinter::print_table(string title, Table table) {
   tp.PrintFooter();
 
   cout << "# of results:\t" << table.size() << endl << endl;
-}
-
-Table RestaurantPrinter::query(string select, string from, string where) {
-  return database_->query(select, from, where);
 }
 
 // Helper due to strange implementation of TableIterator. Maps a function over
@@ -141,5 +151,5 @@ Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table placeIDs) {
   };
   for_each_record(placeIDs, build_where_clause);
 
-  return query("*", "geoplaces2", where_clause);
+  return database_->query("*", "geoplaces2", where_clause);
 }

@@ -50,22 +50,14 @@ public:
 	 * @param attrType The type of the new attribute
 	 * @return Returns true on success, false on failure
 	 */
-	bool add(string &attrName, TYPE &attrType);
-	bool add(char attrName[], TYPE attrType)
-	{
-		return add(string(attrName), attrType);
-	}
+	bool add(const string &attrName, TYPE attrType);
 
 	/**
 	 * Removes an attribute from a table
 	 * @param attrName The name of the attribute to remove
 	 * @return Returns true on success, false on failure
 	 */
-	bool deleteAttribute(string &attrName);
-	bool deleteAttribute(char attrName[])
-	{
-		return deleteAttribute(string(attrName));
-	}
+	bool deleteAttribute(const string &attrName);
 
 	/**
 	 * Inserts a new record into the table
@@ -92,11 +84,7 @@ public:
 	 * @param newName The new name of the attribute
 	 * @return Returns true on success, false on failure
 	 */
-	bool rename(string &attrName, string &newName);
-	bool rename(char attrName[], char newName[])
-	{
-		return rename(string(attrName), string(newName));
-	}
+	bool rename(const string &attrName, const string &newName);
 
 	/**
 	 * Cross join two tables
@@ -110,44 +98,28 @@ public:
 	 * @param attrName The name of the attribute to sum
 	 * @return Returns the sum of the records of that attribute
 	 */
-	float sum(string &attrName);
-	float sum(char attrName[])
-	{
-		return sum(string(attrName));
-	}
+	float sum(const string &attrName);
 
 	/**
 	 * Count the number of entries of a particular attribute
 	 * @param attrName The name of the attribute to count
 	 * @return Returns the number non-NULL entries of that attribute
 	 */
-	int count(string &attrName);
-	int count(char attrName[])
-	{
-		return count(string(attrName));
-	}
+	int count(const string &attrName);
 
 	/**
 	 * Find the minimum entry of a particular attribute
 	 * @param attrName The name of the attribute to find the minimum of
 	 * @return Returns the minimum entry of the attribute
 	 */
-	float min(string &attrName);
-	float min(char attrName[])
-	{
-		return min(string(attrName));
-	};
+	float min(const string &attrName);
 
 	/**
 	 * Find the maximum entry of a particular attribute
 	 * @param attrName The name of the attribute to find the maximum of
 	 * @return Returns the maximum entry of the attribute
 	 */
-	float max(string &attrName);
-	float max(char attrName[])
-	{
-		return max(string(attrName));
-	}
+	float max(const string &attrName);
 
 private:
 	vector<Record> records; /**< A vector containing all the records of the table */

@@ -39,22 +39,15 @@ public:
 	* @param newAttr New string to go in entry
 	* @return Nothing is returned
 	*/
-	void modifyRecord(int index, string &newAttr);
-	void modifyRecord(int index, char newAttr[])
-	{
-		modify(index, string(newAttr));
-	}
+	void modifyRecord(int index, const string &newAttr);
+
 	/**
 	* Modifies an entry in the Record
 	* @param index Specific place in container of entry to be modified
 	* @param newAttr New string to go in entry
 	* @return Nothing is returned
 	*/
-	void modify(int index, string &newAttr);
-	void modify(int index, char newAttr[])
-	{
-		modify(index, string(newAttr));
-	}
+	void modify(int index, const string &newAttr);
 	
 	
 	int size() const;

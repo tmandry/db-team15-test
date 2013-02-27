@@ -12,22 +12,24 @@ returnRecord read_data(string filename)
   bool first_line = true;
 
 	// look through each line
-	while(getline(data_file, line)) {
+	while (getline(data_file, line)) {
 		vector<string> fields;
-		StringTokenizer tokenized_line(line); 
-		tokenized_line.set_delim(',');
+		StringTokenizer tokenizer(line); 
+		tokenizer.set_delim(',');
 
-		while(!tokenized_line.at_end()) { // push tokens from each line into vector
-			string field = tokenized_line.next_token();
+		while (!tokenizer.at_end()) { // push tokens from each line into vector
+			string field = tokenizer.next_token();
 			fields.push_back(field);
 		}
 
-		Record new_record(fields);
-    if(first_line) {
+    if (first_line) {
       record.fields = fields; // return the column labels
+      first_line = false;
+    } else {
+      Record new_record(fields);
+      record.record_vector.push_back(new_record);
     }
-		record.record_vector.push_back(new_record);
-    first_line = false;
 	}
+
 	return record;
 }

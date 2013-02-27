@@ -8,9 +8,9 @@ StringTokenizer::StringTokenizer(string str)
 }
 
 // Returns the next token, skipping consecutive spaces.
-string StringTokenizer::next_token()
-{
-  if (pos_ >= str_.size()) return "";
+string StringTokenizer::next_token() {
+  if (pos_ >= str_.size())
+    return "";
 
   size_t next_space = str_.find(delim_, pos_);
   string token = str_.substr(pos_, next_space - pos_);
@@ -22,7 +22,6 @@ string StringTokenizer::next_token()
   return token;
 }
 
-bool StringTokenizer::at_end() const
-{
+bool StringTokenizer::at_end() const {
   return pos_ == string::npos || pos_ >= str_.size();
 }

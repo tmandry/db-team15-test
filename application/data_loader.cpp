@@ -66,6 +66,38 @@ static const TableDescriptor<5>::type RATING = {
   make_pair("service_rating", Table::INT)
 };
 
+static const TableDescriptor<2>::type USER_CUISINE = {
+  make_pair("userID", Table::STRING),
+  make_pair("cusisine", Table::STRING)
+};
+
+static const TableDescriptor<2>::type USER_PAYMENT = {
+  make_pair("userID", Table::STRING),
+  make_pair("payment", Table::STRING)
+};
+
+static const TableDescriptor<19>::type USER_PROFILE = {
+  make_pair("userID", Table::STRING),
+  make_pair("latitude", Table::FLOAT),
+  make_pair("longitude", Table::FLOAT),
+  make_pair("smoker", Table::STRING),
+  make_pair("drink_level", Table::STRING),
+  make_pair("dress_preference", Table::STRING),
+  make_pair("ambience", Table::STRING),
+  make_pair("transport", Table::STRING),
+  make_pair("martial_status", Table::STRING),
+  make_pair("has_children", Table::STRING),
+  make_pair("birth_year", Table::INT),
+  make_pair("interest", Table::STRING),
+  make_pair("personality", Table::STRING),
+  make_pair("religion", Table::STRING),
+  make_pair("activity", Table::STRING),
+  make_pair("color", Table::STRING),
+  make_pair("weight", Table::INT),
+  make_pair("budget", Table::STRING),
+  make_pair("height", Table::FLOAT)
+};
+
 DataLoader::DataLoader(string data_dir) {
 
 }
@@ -80,6 +112,9 @@ Database* DataLoader::load() {
   load_table("chefmozparking.csv", "Parking", PARKING);
   load_table("geoplaces2.csv", "Locations", PLACES);
   load_table("rating_final.csv", "Ratings", RATING);
+  load_table("usercuisine.csv", "UserCuisine", USER_CUISINE);
+  load_table("userpayment.csv", "UserPayment", USER_PAYMENT);
+  load_table("userprofile.csv", "UserProfile", USER_PROFILE);
   return db_;
 }
 

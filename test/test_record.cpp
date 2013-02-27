@@ -4,6 +4,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 using namespace std;
 
 // 14 test cases
@@ -18,8 +19,8 @@ using namespace std;
  */
 
 vector<string> get_attributes() {
-  string attr_array[] = { "Ol' Rock", "56", "Super Senior", "4.0", "2013/01/01", "-9", "-3.5" };
-  vector<string> attr(attr_array, attr_array + 5);
+  array<string, 7> attr_array = { "Ol' Rock", "56", "Super Senior", "4.0", "2013/01/01", "-9", "-3.5" };
+  vector<string> attr(attr_array.begin(), attr_array.end());
 
   return attr;
 }
@@ -73,9 +74,9 @@ TEST(RecordRetrievalTest, RetrievesFloatingAttribute) {
 TEST(RecordRetrievalTest, RetrievesDateAttribute) {
   setup_shared_record();
 
-  EXPECT_EQ("01/01/2013", shared_record.retrieveRecord(4));
+  EXPECT_EQ("2013/01/01", shared_record.retrieveRecord(4));
 
-  EXPECT_EQ("01/01/2013", shared_record.retrieve(4));
+  EXPECT_EQ("2013/01/01", shared_record.retrieve(4));
 }
 
 /* Test Modifying of Attributes */

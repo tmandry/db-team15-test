@@ -334,7 +334,7 @@ TEST(QueryTest, HandlesThreeNestedWhereQuery) {
 
   EXPECT_NO_THROW(query = database.query("*", "students", "Age = 19 OR ( Name = 'Jack Smith' AND ( GPA > 3.0 AND ( Grade = 'Senior' OR  GraduationDate = '2013/05/06') )"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
-  EXPECT_EQ(query.size(), 1);
+  EXPECT_EQ(query.size(), 2);
 
   TableIterator it(query);
   Record r = it.getRecord();
@@ -757,9 +757,9 @@ TEST(DateComparisonTest, HandlesWhereLteQuery) {
   Database database = get_basic_database();
   Table query;
 
-  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate <= 3.0"));
+  EXPECT_NO_THROW(query = database.query("*", "students", "GraduationDate <= 2013/05/06"));
   EXPECT_THAT(query.attributes(), ContainerEq( get_attribute_pairs() ));
-  EXPECT_EQ(query.size(), 3);
+  EXPECT_EQ(query.size(), 2);
 }
 
 /******** String comparison tests ********/

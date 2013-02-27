@@ -59,7 +59,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>Debug;database\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>gmock.lib;gmock_main.lib;Team15DatabaseDll.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gmock.lib;gmock_main.lib;Team15Dll.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

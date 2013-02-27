@@ -1,11 +1,12 @@
 #ifndef __TOKEN__TEAM15_
 #define __TOKEN__TEAM15_
 
+#include "DllExportInclude.h"
 #include <string>
 
 using namespace std;
 
-class Token {
+class DBDLL_API Token {
 public:
     char kind;        // what kind of token
 	float value;

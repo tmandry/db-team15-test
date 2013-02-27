@@ -1,5 +1,6 @@
 #include "gmock/gmock.h"
 #include "Table.h"
+#include "TableIterator.h"
 #include "Error.h"
 #include <string>
 #include <vector>

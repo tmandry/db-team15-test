@@ -1,6 +1,7 @@
 #ifndef __TOKENSTREAM__TEAM15_
 #define __TOKENSTREAM__TEAM15_
 
+#include "DllExportInclude.h"
 #include "Token.h"
 #include <string>
 #include <iostream>
@@ -8,7 +9,7 @@
 
 using namespace std;
 
-class TokenStream
+class DBDLL_API TokenStream
 {
 public: 
 	TokenStream(stringstream &stream);   // make a Token_stream that reads from cin

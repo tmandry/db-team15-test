@@ -1,4 +1,4 @@
-#ifndef DBDLL_EXPORTS
+#ifdef DBDLL_EXPORTS
 #define DBDLL_API __declspec(dllexport)
 #define EXPIMP_TEMPLATE
 #else
@@ -6,4 +6,3 @@
 #define EXPIMP_TEMPLATE extern
 #endif
 
-#pragma warning(disable: 4251)

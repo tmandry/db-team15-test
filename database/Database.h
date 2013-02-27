@@ -25,26 +25,34 @@ public:
 	 * @param tableName Name of the Table to be added
 	 * @return true on success, false on failure
 	 */
-	bool addTable(Table table, string tableName);
+	bool addTable(Table &table, string &tableName);
+	bool addTable(Table &table, char tableName[])
+	{
+		return addTable(table, string(tableName));
+	}
 
 	/**
 	 * Drops a Table from the Database
 	 * @param tableName Name of the Table to be dropped from the Database
 	 * @return true on success, false if not found
 	 */
-	bool dropTable(string tableName);
+	bool dropTable(string &tableName);
+	bool dropTable(char tableName[])
+	{
+		return dropTable(string(tableName));
+	}
 
 	/**
 	 * Returns a vector of all the table names currently in the Database.
 	 * @return vector<string> of Table names
 	 */
-	vector<string> getTableNames();
+	vector<string>& getTableNames();
 
 	/**
 	 * Returns a vector of Tables currently in the Database.
 	 * @return vector<Table> of all Tables
 	 */
-	vector<Table> getTables();
+	vector<Table>& getTables();
 
 	/**
 	 * Queries the Database and retrieves the wanted data
@@ -53,7 +61,11 @@ public:
 	 * @param whereString Conditions for retrieved data
 	 * @return Table with all the selected data
 	 */
-	Table query(string selectString, string fromString, string whereString);
+	Table& query(string &selectString, string &fromString, string &whereString);
+	Table& query(char selectString[], char fromString[], char whereString[])
+	{
+		return query(string(selectString), string(fromString), string(whereString));
+	}
 
 	/**
 	 * Delete data from a Table
@@ -62,7 +74,11 @@ public:
 	 * @param whereString Conditions for deleting data
 	 * @return True on success, False on error
 	 */
-	bool deleteQuery(string selectString, string fromString, string whereString);
+	bool deleteQuery(string &selectString, string &fromString, string &whereString);
+	bool deleteQuery(char selectString[], char fromString[], char whereString[])
+	{
+		return deleteQuery(string(selectString), string(fromString), string(whereString));
+	}
 
 private:
 

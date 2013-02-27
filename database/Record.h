@@ -16,22 +16,22 @@ public:
 	/**
 	* Creates a Record from the inputed vector of strings.
 	*/
-	Record(vector<string> newEntry);
+	Record(vector<string> &newEntry);
 
 	/**
 	* Retrieves an entry from the Record
 	* @param index Specific index in container of desired entry
 	* @return The desired entry is returned as a string
 	*/
-	string retrieveRecord(int index);
+	string& retrieveRecord(int index);
 
 	/**
 	* Retrieves an entry from the Record
 	* @param index Specific index in container of desired entry
 	* @return The desired entry is returned as a string
 	*/
-	string retrieve(int index);
-	string retrieveConst(int index) const;
+	string& retrieve(int index);
+	string& retrieveConst(int index) const;
 
 	/**
 	* Modifies an entry in the Record
@@ -39,14 +39,23 @@ public:
 	* @param newAttr New string to go in entry
 	* @return Nothing is returned
 	*/
-	void modifyRecord(int index, string newAttr);
+	void modifyRecord(int index, string &newAttr);
+	void modifyRecord(int index, char newAttr[])
+	{
+		modify(index, string(newAttr));
+	}
 	/**
 	* Modifies an entry in the Record
 	* @param index Specific place in container of entry to be modified
 	* @param newAttr New string to go in entry
 	* @return Nothing is returned
 	*/
-	void modify(int index, string newAttr);
+	void modify(int index, string &newAttr);
+	void modify(int index, char newAttr[])
+	{
+		modify(index, string(newAttr));
+	}
+	
 	
 	int size() const;
 

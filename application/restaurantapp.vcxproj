@@ -85,6 +85,8 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bprinter\impl\table_printer.tpp.h" />
+    <ClInclude Include="bprinter\table_printer.h" />
     <ClInclude Include="data_loader.h" />
     <ClInclude Include="inputdata.h" />
     <ClInclude Include="menu.h" />
@@ -97,6 +99,7 @@
     <ClCompile Include="inputdata.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="restaurantapp.cpp" />
+    <ClCompile Include="restaurant_printer.cpp" />
     <ClCompile Include="string_tokenizer.cpp" />
   </ItemGroup>
   <ItemGroup>

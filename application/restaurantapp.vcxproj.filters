@@ -36,6 +36,12 @@
     <ClInclude Include="restaurant_printer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="bprinter\table_printer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bprinter\impl\table_printer.tpp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="restaurantapp.cpp">
@@ -51,6 +57,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="data_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="restaurant_printer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,14 +17,9 @@ public:
 
   Database* load();
 
-  template<int Num>
-  struct TableDescriptor {
-    typedef array<pair<string, Table::TYPE>, Num> type;
-  };
-
 private:
-  template<int Num>
-  void load_table(string filename, TableDescriptor<Num>* descriptor);
+  template<typename D>
+  void load_table(string filename, string table_name, const D& descriptor);
 
   Database *db_;
 };

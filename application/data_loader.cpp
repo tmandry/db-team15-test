@@ -8,28 +8,33 @@
 #include "Table.h"
 #include "Database.h"
 
-static const DataLoader::TableDescriptor<2>::type ACCEPTS = {
+template<int Num>
+struct TableDescriptor {
+  typedef array<pair<string, Table::TYPE>, Num> type;
+};
+
+static const TableDescriptor<2>::type ACCEPTS = {
   make_pair("placeID", Table::STRING),
   make_pair("payment", Table::STRING)
 };
 
-static const DataLoader::TableDescriptor<2>::type CUISINE = {
+static const TableDescriptor<2>::type CUISINE = {
   make_pair("placeID", Table::STRING),
   make_pair("cuisine", Table::STRING)
 };
 
-static const DataLoader::TableDescriptor<3>::type HOURS = {
+static const TableDescriptor<3>::type HOURS = {
   make_pair("placeID", Table::STRING),
   make_pair("hours", Table::STRING),
   make_pair("days", Table::STRING)
 };
 
-static const DataLoader::TableDescriptor<2>::type PARKING = {
+static const TableDescriptor<2>::type PARKING = {
   make_pair("placeID", Table::STRING),
   make_pair("parking_lot", Table::STRING)
 };
 
-static const DataLoader::TableDescriptor<21>::type PLACES = {
+static const TableDescriptor<21>::type PLACES = {
   make_pair("placeID", Table::STRING),
   make_pair("latitude", Table::FLOAT),
   make_pair("longitude", Table::FLOAT),
@@ -51,7 +56,15 @@ static const DataLoader::TableDescriptor<21>::type PLACES = {
   make_pair("franchise", Table::STRING),
   make_pair("area", Table::STRING),
   make_pair("other_services", Table::STRING)
-}
+};
+
+static const TableDescriptor<5>::type RATING = {
+  make_pair("userID", Table::STRING),
+  make_pair("placeID", Table::STRING),
+  make_pair("rating", Table::INT),
+  make_pair("food_rating", Table::INT),
+  make_pair("service_rating", Table::INT)
+};
 
 DataLoader::DataLoader(string data_dir) {
 
@@ -66,14 +79,15 @@ Database* DataLoader::load() {
   load_table("chefmozhours.csv", "Hours", HOURS);
   load_table("chefmozparking.csv", "Parking", PARKING);
   load_table("geoplaces2.csv", "Locations", PLACES);
+  load_table("rating_final.csv", "Ratings", RATING);
   return db_;
 }
 
-template<int Num>
-void DataLoader::load_table(string filename, string table_name, TableDescriptor<Num>* descriptor) {
-  vector<pair<string, Table::TYPE>> spec(descriptor->begin(), descriptor->end());
+template<typename D>
+void DataLoader::load_table(string filename, string table_name, const D& descriptor) {
+  vector<pair<string, Table::TYPE>> spec(descriptor.begin(), descriptor.end());
   vector<Record> records = read_data(filename).record_vector;
-  Table table = new Table(spec);
+  Table table = Table(spec);
   //for (const Record& record : records)
   //  table->insert(record);
   db_->addTable(table, table_name);

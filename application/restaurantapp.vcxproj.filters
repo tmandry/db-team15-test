@@ -39,9 +39,6 @@
     <ClInclude Include="bprinter\table_printer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bprinter\impl\table_printer.tpp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="restaurantapp.cpp">

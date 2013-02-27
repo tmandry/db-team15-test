@@ -1,10 +1,10 @@
 #include "inputdata.h"
 
-using namespace std; 
+using namespace std;
 
-returnRecord read_data(string filename)
+ReturnRecord read_data(string filename)
 {
-  returnRecord record; 
+  ReturnRecord record;
 	ifstream data_file;
 	string line;
 	data_file.open(filename);
@@ -14,7 +14,7 @@ returnRecord read_data(string filename)
 	// look through each line
 	while (getline(data_file, line)) {
 		vector<string> fields;
-		StringTokenizer tokenizer(line); 
+		StringTokenizer tokenizer(line);
 		tokenizer.set_delim(',');
 
 		while (!tokenizer.at_end()) { // push tokens from each line into vector

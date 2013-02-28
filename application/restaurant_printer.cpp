@@ -29,7 +29,16 @@ void RestaurantPrinter::print_customer_ratings(string customer_id) {
 }
 
 void RestaurantPrinter::print_customers_with_at_least_budget(string minimum_budget) {
-  print_table("Customers With Minimum Budget: " + minimum_budget, database_->query("*", "UserProfile", "budget >= " + minimum_budget));
+  Table results;
+  if (minimum_budget == "low") {
+    results = database_->query("*", "UserProfile", "budget = 'low' OR budget = 'medium' OR budget = 'high'");
+  } else if (minimum_budget == "medium") {
+    results = database_->query("*", "UserProfile", "budget = 'medium' OR budget = 'high'");
+  } else {
+    results = database_->query("*", "UserProfile", "budget = 'high'");
+  }
+  
+  print_table("Customers With Minimum Budget: " + minimum_budget, results);
 }
 
 void RestaurantPrinter::print_restaurant(string restaurant_name) {
@@ -139,14 +148,18 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
   TableIterator it(table);
 
   // handling of the first record
-  it.first();
-  procedure(it.getRecord());
-
-  // iterate through the rest
-  for (int i = 1; i < table.size(); i++) {
-    it.next();
+  if (it.next()) {
+    it.first();
     procedure(it.getRecord());
+     
+    // iterate through the rest
+    for (int i = 1; i < table.size(); i++) {
+      it.next();
+      procedure(it.getRecord());
+    }
   }
+
+
 }
 
 // Gives us a way to emulate SQL's 'IN' operator. Takes a table where the first

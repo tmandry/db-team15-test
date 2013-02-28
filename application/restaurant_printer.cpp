@@ -9,7 +9,9 @@ RestaurantPrinter::RestaurantPrinter(Database *database, string filename) {
   output_->open(filename);
 }
 
-RestaurantPrinter::~RestaurantPrinter() {}
+RestaurantPrinter::~RestaurantPrinter() {
+  output_->close();
+}
 
 void RestaurantPrinter::set_database(Database *database) {
   database_ = database;

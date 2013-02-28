@@ -4,12 +4,13 @@
 #include <vector>
 #include <iostream>
 #include <functional>
+#include <fstream>
 #include "Database.h"
 
-// Takes parameters to make queries and print out results to stdout
+// Takes parameters to make queries and print out results to file
 class RestaurantPrinter {
 public:
-  RestaurantPrinter(Database *database);
+  RestaurantPrinter(Database *database, string filename);
   ~RestaurantPrinter();
 
   void set_database(Database *database);
@@ -34,4 +35,5 @@ private:
   Table lookup_and_combine_restaurant_tables(Table placeIDs);
 
   Database *database_;
+  ofstream *output_;
 };

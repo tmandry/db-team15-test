@@ -8,3 +8,4 @@ Release/
 *.sublime-workspace
 *.opensdf
 *.sdf
+application/output.txt

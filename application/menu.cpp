@@ -21,7 +21,7 @@ static const array<CommandDescriptor, 2> COMMANDS = {
 };
 
 Menu::Menu(Database *db)
-  : db_(db), printer_(RestaurantPrinter(db))
+  : db_(db), printer_(RestaurantPrinter(db, "output.txt"))
 {
   // build map of commands
   for (const CommandDescriptor& cmd : COMMANDS) {

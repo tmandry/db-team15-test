@@ -68,7 +68,7 @@ static const TableDescriptor<5>::type RATING = {
 
 static const TableDescriptor<2>::type USER_CUISINE = {
   make_pair("userID", Table::STRING),
-  make_pair("cusisine", Table::STRING)
+  make_pair("cuisine", Table::STRING)
 };
 
 static const TableDescriptor<2>::type USER_PAYMENT = {
@@ -94,7 +94,7 @@ static const TableDescriptor<19>::type USER_PROFILE = {
   make_pair("activity", Table::STRING),
   make_pair("color", Table::STRING),
   make_pair("weight", Table::INT),
-  make_pair("budget", Table::STRING),
+  make_pair("budget", Table::FLOAT),
   make_pair("height", Table::FLOAT)
 };
 

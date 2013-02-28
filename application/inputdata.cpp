@@ -2,13 +2,12 @@
 
 using namespace std;
 
-ReturnRecord read_data(string filename)
+vector< vector<string> > read_data(string filename)
 {
-  ReturnRecord record;
-	ifstream data_file;
+  ifstream data_file;
 	string line;
 	data_file.open(filename);
-	vector<Record> record_vector;
+	vector< vector<string> > record_vector;
   bool first_line = true;
 
 	// look through each line
@@ -21,15 +20,11 @@ ReturnRecord read_data(string filename)
 			string field = tokenizer.next_token();
 			fields.push_back(field);
 		}
-
     if (first_line) {
-      record.fields = fields; // return the column labels
-      first_line = false;
+      first_line = false; // skip the first line
     } else {
-      Record new_record(fields);
-      record.record_vector.push_back(new_record);
+      record_vector.push_back(fields);
     }
 	}
-
-	return record;
+	return record_vector;
 }

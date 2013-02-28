@@ -24,4 +24,4 @@ struct ReturnRecord
 * @param filename Name of the .CSV file to be opened and read in
 * @return A struct ReturnRecord
 */
-ReturnRecord read_data(string filename);
+vector< vector<string> > read_data(string filename);

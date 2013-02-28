@@ -10,14 +10,32 @@ using namespace std;
 
 void my_func(RestaurantPrinter printer, vector<string> args) {cout << "Doing stuff!\n";}
 void customer_info(RestaurantPrinter printer, vector<string> args) { printer.print_customer(args[0]); };
+void customer_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_customer_ratings(args[0]); };
+void customer_budgets(RestaurantPrinter printer, vector<string> args) { printer.print_customers_with_at_least_budget(args[0]); };
+void restaurant_names(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant(args[0]); };
+void restaurant_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_ratings(args[0]); };
+void restaurant_hours(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_hours(args[0]); };
+void cuisine(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_cuisine(args[0]); };
+void payment(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_that_accept(args[0]); };
+void average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_at_least_average_rating(atof(args[0].c_str())); };
+void rest_cust_combos(RestaurantPrinter printer, vector<string> args) { printer.print_all_restaurant_customer_combinations(); };
 
 // Define commands here, each with a tuple of the command name and a function
 // that takes a vector<string> of arguments and implements the command.
 typedef tuple<string, Menu::CommandFunc> CommandDescriptor;
 // You must update the number of commands in the line below.
-static const array<CommandDescriptor, 2> COMMANDS = {
+static const array<CommandDescriptor, 11> COMMANDS = {
   make_tuple("dostuff", my_func),
-  make_tuple("customer", customer_info)
+  make_tuple("customer", customer_info),
+  make_tuple("customer ratings", customer_ratings),
+  make_tuple("budgets", customer_budgets),
+  make_tuple("restaurants", restaurant_names),
+  make_tuple("restaurant ratings", restaurant_ratings),
+  make_tuple("restaurant hours", restaurant_hours),
+  make_tuple("cuisine", cuisine),
+  make_tuple("payment", payment),
+  make_tuple("average rating", average_rating),
+  make_tuple("restaurant customer combinations", rest_cust_combos)
 };
 
 Menu::Menu(Database *db)

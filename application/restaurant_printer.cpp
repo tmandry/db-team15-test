@@ -148,7 +148,8 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
   TableIterator it(table);
 
   // handling of the first record
-  if (it.next()) {
+
+  if (table.size() > 0) {
     it.first();
     procedure(it.getRecord());
      

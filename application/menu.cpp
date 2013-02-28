@@ -12,7 +12,7 @@ void my_func(RestaurantPrinter printer, vector<string> args) {cout << "Doing stu
 void customer_info(RestaurantPrinter printer, vector<string> args) { printer.print_customer(args[0]); };
 void customer_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_customer_ratings(args[0]); };
 void customer_budgets(RestaurantPrinter printer, vector<string> args) { printer.print_customers_with_at_least_budget(args[0]); };
-void restaurant_names(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant(args[0]); };
+void restaurant_info(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant(args[0]); };
 void restaurant_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_ratings(args[0]); };
 void restaurant_hours(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_hours(args[0]); };
 void cuisine(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_cuisine(args[0]); };
@@ -29,7 +29,7 @@ static const array<CommandDescriptor, 11> COMMANDS = {
   make_tuple("customer", customer_info),
   make_tuple("customer ratings", customer_ratings),
   make_tuple("budgets", customer_budgets),
-  make_tuple("restaurants", restaurant_names),
+  make_tuple("restaurant", restaurant_info),
   make_tuple("restaurant ratings", restaurant_ratings),
   make_tuple("restaurant hours", restaurant_hours),
   make_tuple("cuisine", cuisine),

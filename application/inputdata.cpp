@@ -15,13 +15,14 @@ vector< vector<string> > read_data(string filename)
 		vector<string> fields;
 		StringTokenizer tokenizer(line);
 		tokenizer.set_delim(',');
-
-		while (!tokenizer.at_end()) { // push tokens from each line into vector
+    // push tokens from each line into vector
+		while (!tokenizer.at_end()) { 
 			string field = tokenizer.next_token();
 			fields.push_back(field);
 		}
+    // skip the first line
     if (first_line) {
-      first_line = false; // skip the first line
+      first_line = false; 
     } else {
       record_vector.push_back(fields);
     }

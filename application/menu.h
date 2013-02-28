@@ -22,4 +22,3 @@ private:
   map<string, CommandFunc> commands_;
   Database *db_;
 };
-

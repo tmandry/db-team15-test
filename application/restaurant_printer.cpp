@@ -2,15 +2,14 @@
 #include "bprinter/table_printer.h"
 #include "TableIterator.h"
 #include <functional>
+#include <fstream>
 
-RestaurantPrinter::RestaurantPrinter(Database *database, string filename) {
-  database_ = database;
-  output_ = new ofstream();
-  output_->open(filename);
+RestaurantPrinter::RestaurantPrinter(Database *database, string filename)
+  : database_(database), filename_(filename)
+{
 }
 
 RestaurantPrinter::~RestaurantPrinter() {
-  output_->close();
 }
 
 void RestaurantPrinter::set_database(Database *database) {
@@ -106,10 +105,13 @@ void RestaurantPrinter::print_all_restaurant_customer_combinations() {
 
 // Prints all columns of a table to file
 void RestaurantPrinter::print_table(string title, Table table) {
-  cout << "*******\t" << title << "\t*******" << endl << endl;
-  *output_ << "*******\t" << title << "\t*******" << endl << endl;
+  ofstream output;
+  output.open(filename_);
 
-  bprinter::TablePrinter tp(output_);
+  cout << "*******\t" << title << "\t*******" << endl << endl;
+  output << "*******\t" << title << "\t*******" << endl << endl;
+
+  bprinter::TablePrinter tp(&output);
   for (auto name_type : table.attributes())
     tp.AddColumn(name_type.first, 15);
   tp.PrintHeader();
@@ -126,7 +128,9 @@ void RestaurantPrinter::print_table(string title, Table table) {
   tp.PrintFooter();
 
   cout << "# of results:\t" << table.size() << endl << endl;
-  *output_ << "# of results:\t" << table.size() << endl << endl;
+  output << "# of results:\t" << table.size() << endl << endl;
+
+  output.close();
 }
 
 // Helper due to strange implementation of TableIterator. Maps a function over

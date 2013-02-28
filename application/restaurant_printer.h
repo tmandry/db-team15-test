@@ -4,7 +4,6 @@
 #include <vector>
 #include <iostream>
 #include <functional>
-#include <fstream>
 #include "Database.h"
 
 // Takes parameters to make queries and print out results to file
@@ -34,6 +33,6 @@ private:
   void for_each_record(Table &table, function<void (Record&)> procedure);
   Table lookup_and_combine_restaurant_tables(Table placeIDs);
 
-  Database *database_;
-  ofstream *output_;
+  Database* database_;
+  string filename_;
 };

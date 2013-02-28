@@ -8,18 +8,20 @@
 
 using namespace std;
 
-void my_func(vector<string> args) {cout << "Doing stuff!\n";}
+void my_func(RestaurantPrinter printer, vector<string> args) {cout << "Doing stuff!\n";}
+void customer_info(RestaurantPrinter printer, vector<string> args) { printer.print_customer(args[0]); };
 
 // Define commands here, each with a tuple of the command name and a function
 // that takes a vector<string> of arguments and implements the command.
 typedef tuple<string, Menu::CommandFunc> CommandDescriptor;
 // You must update the number of commands in the line below.
-static const array<CommandDescriptor, 1> COMMANDS = {
-  make_tuple("dostuff", my_func)
+static const array<CommandDescriptor, 2> COMMANDS = {
+  make_tuple("dostuff", my_func),
+  make_tuple("customer", customer_info)
 };
 
 Menu::Menu(Database *db)
-  : db_(db)
+  : db_(db), printer_(RestaurantPrinter(db))
 {
   // build map of commands
   for (const CommandDescriptor& cmd : COMMANDS) {
@@ -27,12 +29,10 @@ Menu::Menu(Database *db)
   }
 }
 
-Menu::~Menu()
-{
+Menu::~Menu() {
 }
 
-void Menu::run()
-{
+void Menu::run() {
   while (true) {
     cout << "> ";
 
@@ -53,7 +53,7 @@ void Menu::run()
     if (cmd_it == commands_.end()) {
       cout << "Command not found." << endl;
     } else {
-      (*cmd_it->second)(args);
+      (*cmd_it->second)(printer_, args);
     }
   }
 }

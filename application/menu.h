@@ -1,5 +1,7 @@
 #pragma once
 
+#include "restaurant_printer.h"
+
 #include <map>
 #include <string>
 #include <vector>
@@ -16,9 +18,10 @@ public:
 
   void run();
 
-  typedef void (*CommandFunc)(vector<string> args);
+  typedef void (*CommandFunc)(RestaurantPrinter printer, vector<string> args);
 
 private:
+  RestaurantPrinter printer_;
   map<string, CommandFunc> commands_;
   Database *db_;
 };

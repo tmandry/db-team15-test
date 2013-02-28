@@ -122,9 +122,9 @@ Database* DataLoader::load() {
 template<typename D>
 void DataLoader::load_table(string filename, string table_name, const D& descriptor) {
   vector<pair<string, Table::TYPE>> spec(descriptor.begin(), descriptor.end());
-  vector<Record> records = read_data(data_dir_+"\\"+filename).record_vector;
+  vector<vector<string>> records = read_data(data_dir_+"\\"+filename);
   Table table = Table(spec);
-  //for (const Record& record : records)
-  //  table->insert(record);
+  for (auto record : records)
+    table.insert(record);
   db_->addTable(table, table_name);
 }

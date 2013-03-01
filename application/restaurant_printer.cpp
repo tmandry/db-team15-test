@@ -142,7 +142,7 @@ void RestaurantPrinter::print_all_restaurant_customer_combinations() {
 }
 
 // Prints all columns of a table to file
-void RestaurantPrinter::print_table(string title, Table table) {
+void RestaurantPrinter::print_table(string title, Table &table) {
   ofstream output;
   output.open(filename_, fstream::app);
 
@@ -194,17 +194,36 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
 
 // Gives us a way to emulate SQL's 'IN' operator. Takes a table where the first
 // column is placeID. It then gets the full information for each restaurant
-// in one table.
-Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table placeIDs) {
-  if (placeIDs.size() == 0) return Table();
-
-  string where_clause;
-  auto build_where_clause = [&] (Record &record) {
-    if (where_clause != "")
-      where_clause += " OR ";
-    where_clause += "placeID = " + record.retrieve(0);
+// in one table. NOTE: Due to the inefficiency of Database::query, any queries involving
+// this function will take quiet a bit of time (up to 5 minutes)
+Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs) {
+  // create a vector of all the information for each restaurant
+  vector<Table> restaurants_vector;
+  auto push = [&] (Record &record) {
+    Table query = database_->query("*", "Locations", "placeID = " + record.retrieve(0));
+    if (query.size() == 0) {
+      vector<string> attr;
+      attr.push_back(record.retrieve(0));
+      for (int i = attr.size(); i < query.attributes().size(); i++)
+        attr.push_back(string());
+      query.insert(attr);
+    }
+    restaurants_vector.push_back(query);
   };
-  for_each_record(placeIDs, build_where_clause);
+  for_each_record(placeIDs, push);
 
-  return database_->query("*", "Locations", where_clause);
+  // combine tables into one
+  Table results(restaurants_vector[0].attributes());
+  for (Table restaurant : restaurants_vector) {
+    auto insert_into_results = [&] (Record &record) {
+      vector<string> attributes;
+      for (int i = 0; i < record.size(); i++) {
+        attributes.push_back(record.retrieve(i));
+      }
+      results.insert(attributes);
+    };
+    for_each_record(restaurant, insert_into_results);
+  }
+
+  return results;
 }

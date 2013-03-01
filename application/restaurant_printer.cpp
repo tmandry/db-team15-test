@@ -134,13 +134,6 @@ void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float min
   print_table("Restaurants With Minimum Average Rating", lookup_and_combine_restaurant_tables(restaurants_with_min_average, 1));
 }
 
-void RestaurantPrinter::print_all_restaurant_customer_combinations() {
-  Table restaurants = database_->query("name", "Locations", "");
-  Table customers = database_->query("userID", "UserProfile", "");
-
-  print_table("All Restaurant-Customer Combinations", restaurants.crossJoin(customers));
-}
-
 // Prints all columns of a table to file
 void RestaurantPrinter::print_table(string title, Table &table) {
   ofstream output;

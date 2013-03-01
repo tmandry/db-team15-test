@@ -11,9 +11,11 @@
 
 int main()
 {
-  cout << "Loading database...\n";
+  cout << "Loading database...";
   DataLoader loader("..\\application\\appdata");
   Database *db = loader.load();
+  cout << "done.\n";
+  cout << "Type `help` to see a list of commands." << endl;
 
   Menu menu(db);
   menu.run();

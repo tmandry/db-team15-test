@@ -28,8 +28,6 @@ public:
   void print_restaurants_that_accept(string payment_type);
   void print_restaurants_with_at_least_average_rating(float minimum_rating);
   void print_average_customer_rating(string restaraunt_name);
-
-  void print_all_restaurant_customer_combinations();
 private:
 
   void print_table(string title, Table &table);

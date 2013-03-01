@@ -27,15 +27,15 @@ typedef tuple<string, Menu::CommandFunc> CommandDescriptor;
 static const array<CommandDescriptor, 11> COMMANDS = {
   make_tuple("dostuff", my_func),
   make_tuple("customer", customer_info),
-  make_tuple("customer ratings", customer_ratings),
+  make_tuple("customer-ratings", customer_ratings),
   make_tuple("budgets", customer_budgets),
   make_tuple("restaurant", restaurant_info),
-  make_tuple("restaurant ratings", restaurant_ratings),
-  make_tuple("restaurant hours", restaurant_hours),
+  make_tuple("restaurant-ratings", restaurant_ratings),
+  make_tuple("restaurant-hours", restaurant_hours),
   make_tuple("cuisine", cuisine),
   make_tuple("payment", payment),
-  make_tuple("average rating", average_rating),
-  make_tuple("restaurant customer combinations", rest_cust_combos)
+  make_tuple("average-rating", average_rating),
+  make_tuple("restaurant-customer-combinations", rest_cust_combos)
 };
 
 Menu::Menu(Database *db)

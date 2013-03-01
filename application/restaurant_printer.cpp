@@ -37,7 +37,7 @@ void RestaurantPrinter::print_customers_with_at_least_budget(string minimum_budg
   } else {
     results = database_->query("*", "UserProfile", "budget = 'high'");
   }
-  
+
   print_table("Customers With Minimum Budget: " + minimum_budget, results);
 }
 
@@ -115,7 +115,7 @@ void RestaurantPrinter::print_all_restaurant_customer_combinations() {
 // Prints all columns of a table to file
 void RestaurantPrinter::print_table(string title, Table table) {
   ofstream output;
-  output.open(filename_);
+  output.open(filename_, fstream::app);
 
   cout << "*******\t" << title << "\t*******" << endl << endl;
   output << "*******\t" << title << "\t*******" << endl << endl;
@@ -152,7 +152,7 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
   if (table.size() > 0) {
     it.first();
     procedure(it.getRecord());
-     
+
     // iterate through the rest
     for (int i = 1; i < table.size(); i++) {
       it.next();

@@ -19,7 +19,7 @@ void cuisine(RestaurantPrinter printer, vector<string> args) { printer.print_res
 void payment(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_that_accept(args[0]); };
 void average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_at_least_average_rating(atof(args[0].c_str())); };
 void rest_cust_combos(RestaurantPrinter printer, vector<string> args) { printer.print_all_restaurant_customer_combinations(); };
-
+void average_customer_rating(RestaurantPrinter printer, vector<string> args) {printer.print_average_customer_rating(args[0]);};
 // Define commands here, each with a tuple of the command name and a function
 // that takes a vector<string> of arguments and implements the command.
 typedef tuple<string, Menu::CommandFunc> CommandDescriptor;

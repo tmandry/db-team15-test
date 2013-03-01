@@ -84,6 +84,21 @@ void RestaurantPrinter::print_restaurants_that_accept(string payment_type) {
   print_table("Restaurants With Payment Type: " + payment_type, results);
 }
 
+void RestaurantPrinter::print_average_customer_rating(string restaurant_name) {
+  Table restaurants = database_->query("placeID", "Locations", "name = '" + restaurant_name + "'");
+  Table average_customer_rating(database_->query("*", "Ratings", ""));
+  auto average_rating = [&] (Record &record) {
+    Table ratings = database_->query("*", "Ratings", "placeID = '" + record.retrieve(0) + "'");
+    float average = ratings.sum("rating") / ratings.count("rating");
+    vector<string> attributes;
+    for (int i = 0; i < record.size(); i++) {
+      attributes.push_back(record.retrieve(i));
+    }
+    average_customer_rating.insert(attributes);
+  };
+  for_each_record(restaurants, average_rating);
+}
+
 void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float minimum_rating) {
   Table restaurants = database_->query("*", "Locations", "");
 

@@ -189,7 +189,7 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
 // column is placeID. It then gets the full information for each restaurant
 // in one table. NOTE: Due to the inefficiency of Database::query, any queries involving
 // this function will take quiet a bit of time (up to 5 minutes)
-Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, unsigned int index_of_placeid) {
+Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, unsigned index_of_placeid) {
   // create a vector of all the information for each restaurant
   vector<Table> restaurants_vector;
   auto push = [&] (Record &record) {
@@ -197,7 +197,7 @@ Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, u
     if (query.size() == 0) {
       vector<string> attr;
       attr.push_back(record.retrieve(0));
-      for (int i = attr.size(); i < query.attributes().size(); i++)
+      for (unsigned i = attr.size(); i < query.attributes().size(); i++)
         attr.push_back(string());
       query.insert(attr);
     }
@@ -210,9 +210,8 @@ Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, u
   for (Table restaurant : restaurants_vector) {
     auto insert_into_results = [&] (Record &record) {
       vector<string> attributes;
-      for (int i = 0; i < record.size(); i++) {
+      for (int i = 0; i < record.size(); i++)
         attributes.push_back(record.retrieve(i));
-      }
       results.insert(attributes);
     };
     for_each_record(restaurant, insert_into_results);

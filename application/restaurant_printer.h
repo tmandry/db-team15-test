@@ -22,6 +22,7 @@ public:
 
   void print_restaurant(string restaurant_name);
   void print_restaurant_ratings(string restaraunt_name);
+  void print_restaurant_average_rating(string restaurant_name);
   void print_restaurant_hours(string restaurant_name);
   void print_restaurants_with_cuisine(string cuisine);
   void print_restaurants_that_accept(string payment_type);
@@ -29,9 +30,12 @@ public:
 
   void print_all_restaurant_customer_combinations();
 private:
+
   void print_table(string title, Table table);
   void for_each_record(Table &table, function<void (Record&)> procedure);
   Table lookup_and_combine_restaurant_tables(Table placeIDs);
+
+  string id_for_restaurant(string restaraunt_name);
 
   Database* database_;
   string filename_;

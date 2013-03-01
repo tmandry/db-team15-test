@@ -41,24 +41,47 @@ void RestaurantPrinter::print_customers_with_at_least_budget(string minimum_budg
   print_table("Customers With Minimum Budget: " + minimum_budget, results);
 }
 
+string RestaurantPrinter::id_for_restaurant(string restaurant_name) {
+  Table restaurant = database_->query("placeID", "Locations", "name = '" + restaurant_name + "'");
+  TableIterator it(restaurant);
+  it.first();
+  return it.getRecord().retrieve(0);
+}
+
 void RestaurantPrinter::print_restaurant(string restaurant_name) {
   print_table("Restaurant Information: " + restaurant_name, database_->query("*", "Locations", "name = '" + restaurant_name + "'"));
 }
 
 void RestaurantPrinter::print_restaurant_ratings(string restaurant_name) {
-  // may be able to use a join here (wasn't sure how to select just the
-  // attributes on the Ratings table and join in one database_->query)
-  Table restaurant = database_->query("placeID", "Locations", "name = '" + restaurant_name + "'");
-  TableIterator it(restaurant);
+  print_table("Ratings for Restaurant: " + restaurant_name, database_->query("userID, rating, food_rating, service_rating", "Ratings", "placeID = '" + id_for_restaurant(restaurant_name) + "'"));
+}
+
+void RestaurantPrinter::print_restaurant_average_rating(string restaurant_name) {
+  Table results = database_->query("userID, placeID, rating, food_rating, service_rating", "Ratings", "placeID = '" + id_for_restaurant(restaurant_name) + "'");
+
+  double overall = 0, food = 0, service = 0;
+  int count = 0;
+  TableIterator it(results);
   it.first();
-  print_table("Ratings for Restaurant: " + restaurant_name, database_->query("userID, rating, food_rating, service_rating", "Ratings", "placeID = '" + it.getRecord().retrieve(0) + "'"));
+  do {
+    Record r = it.getRecord();
+    overall += atof(r.retrieve(2).c_str());
+    food    += atof(r.retrieve(3).c_str());
+    service += atof(r.retrieve(4).c_str());
+    ++count;
+  } while (it.next());
+
+  overall /= count;
+  food /= count;
+  service /= count;
+  cout << "Average ratings for restaurant: " << restaurant_name << endl;
+  cout << "Overall: " << overall << endl;
+  cout << "Food:    " << food << endl;
+  cout << "Service: " << service << endl << endl;
 }
 
 void RestaurantPrinter::print_restaurant_hours(string restaurant_name) {
-  Table restaurant = database_->query("placeID", "Locations", "name = '" + restaurant_name + "'");
-  TableIterator it(restaurant);
-  it.first();
-  print_table("Hours for Restaurant: " + restaurant_name, database_->query("hours, days", "Hours", "placeID = '" + it.getRecord().retrieve(0) + "'"));
+  print_table("Hours for Restaurant: " + restaurant_name, database_->query("hours, days", "Hours", "placeID = '" + id_for_restaurant(restaurant_name) + "'"));
 }
 
 void RestaurantPrinter::print_restaurants_with_cuisine(string cuisine) {

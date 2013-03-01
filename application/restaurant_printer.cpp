@@ -167,6 +167,8 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
 // column is placeID. It then gets the full information for each restaurant
 // in one table.
 Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table placeIDs) {
+  if (placeIDs.size() == 0) return Table();
+
   string where_clause;
   auto build_where_clause = [&] (Record &record) {
     if (where_clause != "")

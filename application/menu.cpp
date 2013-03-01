@@ -8,7 +8,6 @@
 
 using namespace std;
 
-void my_func(RestaurantPrinter printer, vector<string> args) {cout << "Doing stuff!\n";}
 void customer_info(RestaurantPrinter printer, vector<string> args) { printer.print_customer(args[0]); };
 void customer_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_customer_ratings(args[0]); };
 void customer_budgets(RestaurantPrinter printer, vector<string> args) { printer.print_customers_with_at_least_budget(args[0]); };
@@ -25,7 +24,6 @@ void rest_cust_combos(RestaurantPrinter printer, vector<string> args) { printer.
 typedef tuple<string, Menu::CommandFunc> CommandDescriptor;
 // You must update the number of commands in the line below.
 static const array<CommandDescriptor, 11> COMMANDS = {
-  make_tuple("dostuff", my_func),
   make_tuple("customer", customer_info),
   make_tuple("customer-ratings", customer_ratings),
   make_tuple("budgets", customer_budgets),

@@ -19,12 +19,12 @@ void cuisine(RestaurantPrinter printer, vector<string> args) { printer.print_res
 void payment(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_that_accept(args[0]); };
 void average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_at_least_average_rating(atof(args[0].c_str())); };
 void rest_cust_combos(RestaurantPrinter printer, vector<string> args) { printer.print_all_restaurant_customer_combinations(); };
-void average_customer_rating(RestaurantPrinter printer, vector<string> args) {printer.print_average_customer_rating(args[0]);};
+void average_customer_rating(RestaurantPrinter printer, vector<string> args) { printer.print_average_customer_rating(args[0]); };
 // Define commands here, each with a tuple of the command name and a function
 // that takes a vector<string> of arguments and implements the command.
 typedef tuple<string, Menu::CommandFunc> CommandDescriptor;
 // You must update the number of commands in the line below.
-static const array<CommandDescriptor, 11> COMMANDS = {
+static const array<CommandDescriptor, 12> COMMANDS = {
   make_tuple("customer", customer_info),
   make_tuple("customer-ratings", customer_ratings),
   make_tuple("budgets", customer_budgets),
@@ -35,7 +35,8 @@ static const array<CommandDescriptor, 11> COMMANDS = {
   make_tuple("cuisine", cuisine),
   make_tuple("payment", payment),
   make_tuple("average-rating", average_rating),
-  make_tuple("restaurant-customer-combinations", rest_cust_combos)
+  make_tuple("restaurant-customer-combinations", rest_cust_combos),
+  make_tuple("average-customer-rating", average_customer_rating)
 };
 
 Menu::Menu(Database *db)

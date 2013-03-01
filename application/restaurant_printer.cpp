@@ -106,6 +106,10 @@ void RestaurantPrinter::print_average_customer_rating(string userid) {
   print_table("Average Rating for Customer", lookup_and_combine_restaurant_tables(average_customer_rating, 1));
 }
 
+void RestaurantPrinter::print_customer_restaurant_rating(string customer_id, string restaurant_name) {
+  print_table("Customer " + customer_id + "'s Rating for " + restaurant_name, database_->query("*", "Ratings", "userID = '" + customer_id + "' AND placeID = " + id_for_restaurant(restaurant_name)));
+}
+
 void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float minimum_rating) {
   Table restaurants = database_->query("*", "Locations", "");
 

@@ -22,6 +22,12 @@ void payment(RestaurantPrinter printer, vector<string> args) { printer.print_res
 void average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_at_least_average_rating(atof(args[0].c_str())); }
 void average_customer_rating(RestaurantPrinter printer, vector<string> args) { printer.print_average_customer_rating(args[0]); }
 void help(RestaurantPrinter printer, vector<string> args);
+void customer_restaurant_rating(RestaurantPrinter printer, vector<string> args) { 
+  if (args.size() != 2)
+    cout << "2 arguments expected\n";
+  else
+    printer.print_customer_restaurant_rating(args[0], args[1]); 
+}
 
 // Define commands here, each with a tuple of the command name, the arguments
 // it takes, a description, and a function that takes a vector<string> of
@@ -31,6 +37,7 @@ typedef tuple<string, string, string, Menu::CommandFunc> CommandDescriptor;
 static const array<CommandDescriptor, 13> COMMANDS = {
   make_tuple("customer",         "<customer-id>", "Display general info on a customer",  customer_info),
   make_tuple("customer-ratings", "<customer-id>", "Display all ratings by a customer", customer_ratings),
+  make_tuple("customer-restaurant-rating", "<customer-id>, <restaurant-name>", "Display a customer's rating for a particular restaurant", customer_restaurant_rating),
   make_tuple("average-customer-rating", "<customer-id>", "Display average ratings given by a customer", average_customer_rating),
   make_tuple("budgets",          "<min-budget>",  "Display all customers with budget of at least min-budget", customer_budgets),
   make_tuple("restaurant",         "<restaurant-name>", "Display general info on a restaurant", restaurant_info),

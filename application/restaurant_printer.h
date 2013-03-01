@@ -23,6 +23,7 @@ public:
   void print_restaurant(string restaurant_name);
   void print_restaurant_ratings(string restaraunt_name);
   void print_restaurant_average_rating(string restaurant_name);
+  void print_customer_restaurant_rating(string customer_id, string restaurant_name);
   void print_restaurant_hours(string restaurant_name);
   void print_restaurants_with_cuisine(string cuisine);
   void print_restaurants_that_accept(string payment_type);

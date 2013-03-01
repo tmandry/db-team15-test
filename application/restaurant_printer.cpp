@@ -71,7 +71,7 @@ void RestaurantPrinter::print_restaurant_hours(string restaurant_name) {
 void RestaurantPrinter::print_restaurants_with_cuisine(string cuisine) {
   Table restaurants = database_->query("placeID", "Cuisine", "cuisine = '" + cuisine + "'");
 
-  Table results = lookup_and_combine_restaurant_tables(restaurants);
+  Table results = lookup_and_combine_restaurant_tables(restaurants, 0);
 
   print_table("Restaurants With Cuisine: " + cuisine, results);
 }
@@ -79,7 +79,7 @@ void RestaurantPrinter::print_restaurants_with_cuisine(string cuisine) {
 void RestaurantPrinter::print_restaurants_that_accept(string payment_type) {
   Table restaurants = database_->query("placeID", "PaymentType", "payment = '" + payment_type + "'");
 
-  Table results = lookup_and_combine_restaurant_tables(restaurants);
+  Table results = lookup_and_combine_restaurant_tables(restaurants, 0);
 
   print_table("Restaurants With Payment Type: " + payment_type, results);
 }
@@ -103,14 +103,14 @@ void RestaurantPrinter::print_average_customer_rating(string userid) {
 
   for_each_record(results, average_rating);
 
-  print_table("Average Rating for Customer", lookup_and_combine_restaurant_tables(average_customer_rating));
+  print_table("Average Rating for Customer", lookup_and_combine_restaurant_tables(average_customer_rating, 1));
 }
 
 void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float minimum_rating) {
   Table restaurants = database_->query("*", "Locations", "");
 
   // create a table with the same structure as Ratings
-  Table restaurants_with_min_average(database_->query("*", "Ratings", ""));
+  Table restaurants_with_min_average(database_->query("*", "Ratings", "").attributes());
 
   auto find_average = [&] (Record &record) {
     Table ratings = database_->query("*", "Ratings", "placeID = '" + record.retrieve(0) + "'");
@@ -131,7 +131,7 @@ void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float min
   };
   for_each_record(restaurants, find_average);
 
-  print_table("Restaurants With Minimum Average Rating", lookup_and_combine_restaurant_tables(restaurants_with_min_average));
+  print_table("Restaurants With Minimum Average Rating", lookup_and_combine_restaurant_tables(restaurants_with_min_average, 1));
 }
 
 void RestaurantPrinter::print_all_restaurant_customer_combinations() {
@@ -196,11 +196,11 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
 // column is placeID. It then gets the full information for each restaurant
 // in one table. NOTE: Due to the inefficiency of Database::query, any queries involving
 // this function will take quiet a bit of time (up to 5 minutes)
-Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs) {
+Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, unsigned int index_of_placeid) {
   // create a vector of all the information for each restaurant
   vector<Table> restaurants_vector;
   auto push = [&] (Record &record) {
-    Table query = database_->query("*", "Locations", "placeID = " + record.retrieve(0));
+    Table query = database_->query("*", "Locations", "placeID = " + record.retrieve(index_of_placeid));
     if (query.size() == 0) {
       vector<string> attr;
       attr.push_back(record.retrieve(0));

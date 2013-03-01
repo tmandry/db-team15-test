@@ -34,7 +34,7 @@ private:
 
   void print_table(string title, Table &table);
   void for_each_record(Table &table, function<void (Record&)> procedure);
-  Table lookup_and_combine_restaurant_tables(Table &placeIDs);
+  Table lookup_and_combine_restaurant_tables(Table &placeIDs, unsigned int index_of_placeid);
 
   string id_for_restaurant(string restaraunt_name);
 

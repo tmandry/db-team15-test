@@ -63,7 +63,8 @@ void help(RestaurantPrinter printer, vector<string> args) {
     cout << "   " << get<2>(cmd) << "\n";
   }
 
-  cout << "\nType `exit` to exit." << endl;
+  cout << "\nMost commands output to output.txt instead of the console.\n";
+  cout << "Type `exit` to exit." << endl;
 }
 
 Menu::Menu(Database *db)

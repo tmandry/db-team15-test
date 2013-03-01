@@ -110,7 +110,7 @@ void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float min
   // create a table with the same structure as Ratings
   Table restaurants_with_min_average(database_->query("*", "Ratings", "").attributes());
 
-  auto find_average = [&] (Record &record) {
+  for_each_record(restaurants, [&] (Record &record) {
     Table ratings = database_->query("*", "Ratings", "placeID = '" + record.retrieve(0) + "'");
     float average = ratings.sum("rating") / ratings.count("rating");
     // if it meets the minimum we want to insert the FIRST instance of the rating
@@ -126,8 +126,7 @@ void RestaurantPrinter::print_restaurants_with_at_least_average_rating(float min
       }
       restaurants_with_min_average.insert(attributes);
     }
-  };
-  for_each_record(restaurants, find_average);
+  });
 
   print_table("Restaurants With Minimum Average Rating", lookup_and_combine_restaurant_tables(restaurants_with_min_average, 1));
 }
@@ -146,12 +145,10 @@ void RestaurantPrinter::print_table(string title, Table &table) {
   tp.PrintHeader();
 
   // prints a row of all attributes in the record
-  auto print_record = [&] (Record &record) {
+  for_each_record(table, [&] (Record &record) {
     for (int i = 0; i < record.size(); i++)
       tp << record.retrieve(i);
-  };
-
-  for_each_record(table, print_record);
+  });
 
   tp << bprinter::endl();
   tp.PrintFooter();
@@ -186,34 +183,33 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
 // this function will take quiet a bit of time (up to 5 minutes)
 Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, unsigned index_of_placeid) {
   // create a vector of all the information for each restaurant
-  vector<Table> restaurants_vector;
+  vector<Table*> restaurants_vector;
 
-  auto push = [&] (Record &record) {
+  for_each_record(placeIDs, [&] (Record &record) {
     // lookup the complete data for the location
-    Table query = database_->query("*", "Locations", "placeID = " + record.retrieve(index_of_placeid));
+    Table *query = new Table(database_->query("*", "Locations", "placeID = " + record.retrieve(index_of_placeid)));
     // if the location doesn't exist in Locations, create empty attributes
-    if (query.size() == 0) {
+    if (query->size() == 0) {
       vector<string> attr;
       attr.push_back(record.retrieve(0));
-      for (unsigned i = attr.size(); i < query.attributes().size(); i++)
+      for (unsigned i = attr.size(); i < query->attributes().size(); i++)
         attr.push_back(string());
-      query.insert(attr);
+      query->insert(attr);
     }
     // push the table onto total vector
     restaurants_vector.push_back(query);
-  };
-  for_each_record(placeIDs, push);
+  });
 
   // combine tables into one
-  Table results(restaurants_vector[0].attributes());
-  for (Table &restaurant : restaurants_vector) {
-    auto insert_into_results = [&] (Record &record) {
+  Table results(restaurants_vector[0]->attributes());
+  for (Table *restaurant : restaurants_vector) {
+    for_each_record(*restaurant, [&] (Record &record) {
       vector<string> attributes;
       for (int i = 0; i < record.size(); i++)
         attributes.push_back(record.retrieve(i));
       results.insert(attributes);
-    };
-    for_each_record(restaurant, insert_into_results);
+    });
+    delete restaurant;
   }
 
   return results;

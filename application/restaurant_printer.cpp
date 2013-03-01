@@ -85,7 +85,7 @@ void RestaurantPrinter::print_restaurants_that_accept(string payment_type) {
 }
 
 void RestaurantPrinter::print_average_customer_rating(string userid) {
-  Table results = database_->query("userID, placeID, rating, food_rating, service_rating", "Ratings", "placeID = '" + userid + "'");
+  Table results = database_->query("userID, placeID, rating, food_rating, service_rating", "Ratings", "UserID = '" + userid + "'");
   Table average_customer_rating(database_->query("*", "Ratings", ""));
 
   auto average_rating = [&] (Record &records) {

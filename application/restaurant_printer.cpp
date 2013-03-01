@@ -86,24 +86,10 @@ void RestaurantPrinter::print_restaurants_that_accept(string payment_type) {
 
 void RestaurantPrinter::print_average_customer_rating(string userid) {
   Table results = database_->query("userID, placeID, rating, food_rating, service_rating", "Ratings", "UserID = '" + userid + "'");
-  Table average_customer_rating(database_->query("*", "Ratings", ""));
-
-  auto average_rating = [&] (Record &records) {
-    Table ratings = database_->query("*", "Ratings", "placeID = '" + records.retrieve(0) + "'");
-    float average = ratings.sum("rating") / ratings.count("rating");
-    TableIterator it(ratings);
-    it.first();
-    Record record = it.getRecord();
-    vector<string> attributes;
-    for (int i = 0; i < record.size(); i++) {
-      attributes.push_back(record.retrieve(i));
-    }
-    average_customer_rating.insert(attributes);
-  };
-
-  for_each_record(results, average_rating);
-
-  print_table("Average Rating for Customer", lookup_and_combine_restaurant_tables(average_customer_rating, 1));
+  cout << "Average ratings for customer: " << userid << endl;
+  cout << "Overall: " << results.sum("rating")/results.count("rating") << endl;
+  cout << "Food:    " << results.sum("food_rating")/results.count("food_rating") << endl;
+  cout << "Service: " << results.sum("service_rating")/results.count("service_rating") << endl << endl;
 }
 
 void RestaurantPrinter::print_customer_restaurant_rating(string customer_id, string restaurant_name) {

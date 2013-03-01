@@ -6,3 +6,4 @@
 #define EXPIMP_TEMPLATE extern
 #endif
 
+#pragma warning(disable: 4251)

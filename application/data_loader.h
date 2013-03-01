@@ -9,6 +9,7 @@ using namespace std;
 
 class Database;
 
+// Class to load data from CSV files into a database.
 class DataLoader
 {
 public:

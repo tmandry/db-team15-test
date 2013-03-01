@@ -9,17 +9,18 @@
 
 using namespace std;
 
-void customer_info(RestaurantPrinter printer, vector<string> args) { printer.print_customer(args[0]); };
-void customer_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_customer_ratings(args[0]); };
-void customer_budgets(RestaurantPrinter printer, vector<string> args) { printer.print_customers_with_at_least_budget(args[0]); };
-void restaurant_info(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant(args[0]); };
-void restaurant_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_ratings(args[0]); };
+// Helper functions to connect menu commands to RestaurantPrinter functions.
+void customer_info(RestaurantPrinter printer, vector<string> args) { printer.print_customer(args[0]); }
+void customer_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_customer_ratings(args[0]); }
+void customer_budgets(RestaurantPrinter printer, vector<string> args) { printer.print_customers_with_at_least_budget(args[0]); }
+void restaurant_info(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant(args[0]); }
+void restaurant_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_ratings(args[0]); }
 void restaurant_average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_average_rating(args[0]); }
-void restaurant_hours(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_hours(args[0]); };
-void cuisine(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_cuisine(args[0]); };
-void payment(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_that_accept(args[0]); };
-void average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_at_least_average_rating(atof(args[0].c_str())); };
-void average_customer_rating(RestaurantPrinter printer, vector<string> args) { printer.print_average_customer_rating(args[0]); };
+void restaurant_hours(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_hours(args[0]); }
+void cuisine(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_cuisine(args[0]); }
+void payment(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_that_accept(args[0]); }
+void average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurants_with_at_least_average_rating(atof(args[0].c_str())); }
+void average_customer_rating(RestaurantPrinter printer, vector<string> args) { printer.print_average_customer_rating(args[0]); }
 void help(RestaurantPrinter printer, vector<string> args);
 
 // Define commands here, each with a tuple of the command name, the arguments
@@ -42,6 +43,7 @@ static const array<CommandDescriptor, 13> COMMANDS = {
   make_tuple("help", "", "Print this list", help)
 };
 
+// Prints a list of commands.
 void help(RestaurantPrinter printer, vector<string> args) {
   cout << "You can use these commands:\n\n";
 
@@ -65,14 +67,17 @@ Menu::Menu(Database *db)
 Menu::~Menu() {
 }
 
+// Main loop where the menu prompt executes.
 void Menu::run() {
   while (true) {
     cout << "> ";
 
+    // Read the command
     string line;
     getline(cin, line);
     StringTokenizer tok(line);
 
+    // Parse the command
     string command = tok.next_token();
     tok.set_delim(',');
     vector<string> args;
@@ -82,6 +87,7 @@ void Menu::run() {
 
     if (command == "exit") break;
 
+    // Execute the command
     auto cmd_it = commands_.find(command);
     if (cmd_it == commands_.end()) {
       cout << "Command not found." << endl;

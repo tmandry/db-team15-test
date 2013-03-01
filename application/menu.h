@@ -10,6 +10,7 @@ using namespace std;
 
 class Database;
 
+// Class that implements the menu prompt interface.
 class Menu
 {
 public:

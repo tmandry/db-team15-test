@@ -1,3 +1,6 @@
+// This file contains descriptions of every table (column names and types) and
+// the code to import them using the CSV parser in InputData.
+
 #include "data_loader.h"
 #include "inputdata.h"
 
@@ -8,6 +11,8 @@
 #include "Table.h"
 #include "Database.h"
 
+// A TableDescriptor is just an array of pairs passed to the Table constructor.
+// It specifies the column names and types of a table.
 template<int Num>
 struct TableDescriptor {
   typedef array<pair<string, Table::TYPE>, Num> type;
@@ -105,6 +110,7 @@ DataLoader::DataLoader(string data_dir)
 
 DataLoader::~DataLoader() {}
 
+// Loads the tables from their respective CSV files into a new database.
 Database* DataLoader::load() {
   db_ = new Database;
   load_table("chefmozaccepts.csv", "PaymentType", ACCEPTS);
@@ -119,12 +125,16 @@ Database* DataLoader::load() {
   return db_;
 }
 
+// Helper function to create a table using a TableDescriptor and a CSV file
+// containing the data.
 template<typename D>
 void DataLoader::load_table(string filename, string table_name, const D& descriptor) {
   vector<pair<string, Table::TYPE>> spec(descriptor.begin(), descriptor.end());
-  vector<vector<string>> records = read_data(data_dir_+"\\"+filename);
   Table table = Table(spec);
+
+  vector<vector<string>> records = read_data(data_dir_+"\\"+filename);
   for (auto record : records)
     table.insert(record);
+
   db_->addTable(table, table_name);
 }

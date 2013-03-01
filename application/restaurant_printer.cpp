@@ -58,26 +58,10 @@ void RestaurantPrinter::print_restaurant_ratings(string restaurant_name) {
 
 void RestaurantPrinter::print_restaurant_average_rating(string restaurant_name) {
   Table results = database_->query("userID, placeID, rating, food_rating, service_rating", "Ratings", "placeID = '" + id_for_restaurant(restaurant_name) + "'");
-
-  double overall = 0, food = 0, service = 0;
-  int count = 0;
-  TableIterator it(results);
-  it.first();
-  do {
-    Record r = it.getRecord();
-    overall += atof(r.retrieve(2).c_str());
-    food    += atof(r.retrieve(3).c_str());
-    service += atof(r.retrieve(4).c_str());
-    ++count;
-  } while (it.next());
-
-  overall /= count;
-  food /= count;
-  service /= count;
   cout << "Average ratings for restaurant: " << restaurant_name << endl;
-  cout << "Overall: " << overall << endl;
-  cout << "Food:    " << food << endl;
-  cout << "Service: " << service << endl << endl;
+  cout << "Overall: " << results.sum("rating")/results.count("rating") << endl;
+  cout << "Food:    " << results.sum("food_rating")/results.count("food_rating") << endl;
+  cout << "Service: " << results.sum("service_rating")/results.count("service_rating") << endl << endl;
 }
 
 void RestaurantPrinter::print_restaurant_hours(string restaurant_name) {

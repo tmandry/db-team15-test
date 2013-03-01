@@ -10,9 +10,11 @@
 using namespace std;
 
 // Helper functions to connect menu commands to RestaurantPrinter functions.
+void customers(RestaurantPrinter printer, vector<string> args) { printer.print_all_customers(); }
 void customer_info(RestaurantPrinter printer, vector<string> args) { printer.print_customer(args[0]); }
 void customer_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_customer_ratings(args[0]); }
 void customer_budgets(RestaurantPrinter printer, vector<string> args) { printer.print_customers_with_at_least_budget(args[0]); }
+void restaurants(RestaurantPrinter printer, vector<string> args) { printer.print_all_restaurants(); }
 void restaurant_info(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant(args[0]); }
 void restaurant_ratings(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_ratings(args[0]); }
 void restaurant_average_rating(RestaurantPrinter printer, vector<string> args) { printer.print_restaurant_average_rating(args[0]); }
@@ -34,12 +36,14 @@ void customer_restaurant_rating(RestaurantPrinter printer, vector<string> args) 
 // arguments and implements the command.
 typedef tuple<string, string, string, Menu::CommandFunc> CommandDescriptor;
 // You must update the number of commands in the line below.
-static const array<CommandDescriptor, 13> COMMANDS = {
+static const array<CommandDescriptor, 15> COMMANDS = {
+  make_tuple("customers",        "",               "Display all customers", customers),
   make_tuple("customer",         "<customer-id>", "Display general info on a customer",  customer_info),
   make_tuple("customer-ratings", "<customer-id>", "Display all ratings by a customer", customer_ratings),
   make_tuple("customer-restaurant-rating", "<customer-id>, <restaurant-name>", "Display a customer's rating for a particular restaurant", customer_restaurant_rating),
   make_tuple("average-customer-rating", "<customer-id>", "Display average ratings given by a customer", average_customer_rating),
   make_tuple("budgets",          "<min-budget>",  "Display all customers with budget of at least min-budget", customer_budgets),
+  make_tuple("restaurants",      "",              "Display all restaurants", restaurants),
   make_tuple("restaurant",         "<restaurant-name>", "Display general info on a restaurant", restaurant_info),
   make_tuple("restaurant-ratings", "<restaurant-name>", "Display all ratings for a restaurant", restaurant_ratings),
   make_tuple("restaurant-average", "<restaurant-name>", "Display average ratings for a restaurant", restaurant_average_rating),

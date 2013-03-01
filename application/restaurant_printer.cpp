@@ -20,6 +20,14 @@ Database* RestaurantPrinter::get_database() {
   return database_;
 }
 
+void RestaurantPrinter::print_all_customers() {
+  print_table("All Customers", database_->query("*", "UserProfile", ""));
+}
+
+void RestaurantPrinter::print_all_restaurants() {
+  print_table("All Restaurants", database_->query("*", "Locations", ""));
+}
+
 void RestaurantPrinter::print_customer(string customer_id) {
   print_table("Customer Information: " + customer_id, database_->query("*", "UserProfile", "userID = '" + customer_id + "'"));
 }
@@ -154,13 +162,12 @@ void RestaurantPrinter::print_table(string title, Table &table) {
   output.close();
 }
 
-// Helper due to strange implementation of TableIterator. Maps a function over
+// Helper due to strange implementation of TableIterator. Maps a given function over
 // every record in a table.
 void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> procedure) {
   TableIterator it(table);
 
   // handling of the first record
-
   if (table.size() > 0) {
     it.first();
     procedure(it.getRecord());
@@ -171,8 +178,6 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
       procedure(it.getRecord());
     }
   }
-
-
 }
 
 // Gives us a way to emulate SQL's 'IN' operator. Takes a table where the first
@@ -182,8 +187,11 @@ void RestaurantPrinter::for_each_record(Table &table, function<void (Record&)> p
 Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, unsigned index_of_placeid) {
   // create a vector of all the information for each restaurant
   vector<Table> restaurants_vector;
+
   auto push = [&] (Record &record) {
+    // lookup the complete data for the location
     Table query = database_->query("*", "Locations", "placeID = " + record.retrieve(index_of_placeid));
+    // if the location doesn't exist in Locations, create empty attributes
     if (query.size() == 0) {
       vector<string> attr;
       attr.push_back(record.retrieve(0));
@@ -191,13 +199,14 @@ Table RestaurantPrinter::lookup_and_combine_restaurant_tables(Table &placeIDs, u
         attr.push_back(string());
       query.insert(attr);
     }
+    // push the table onto total vector
     restaurants_vector.push_back(query);
   };
   for_each_record(placeIDs, push);
 
   // combine tables into one
   Table results(restaurants_vector[0].attributes());
-  for (Table restaurant : restaurants_vector) {
+  for (Table &restaurant : restaurants_vector) {
     auto insert_into_results = [&] (Record &record) {
       vector<string> attributes;
       for (int i = 0; i < record.size(); i++)
